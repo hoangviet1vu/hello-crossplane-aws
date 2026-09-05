@@ -1,0 +1,102 @@
+# definition.yaml — the TenantEnvironment XRD (authoritative, hand-maintained).
+#
+# This file is the source of truth for the TenantEnvironment API shape. It was
+# generated once from schema.yaml via `crossplane xrd generate --from
+# simpleschema` and is now hand-maintained. Do NOT re-run `xrd generate`: it does
+# not emit CEL x-kubernetes-validations, so re-running it silently deletes the
+# tenant name pattern and the immutability rules. See .kiro/steering/tech.md
+# ("Regenerating is destructive") and design.md.
+apiVersion: apiextensions.crossplane.io/v2
+kind: CompositeResourceDefinition
+metadata:
+  name: tenantenvironments.platform.hello-crossplane.io
+spec:
+  scope: Namespaced
+  group: platform.hello-crossplane.io
+  names:
+    kind: TenantEnvironment
+    plural: tenantenvironments
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      # Schema, CEL immutability rules, and the status subresource are added by
+      # later sub-tasks (1.2 spec schema, 1.3 CEL rules, 1.4 status subresource).
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              # 1.2: spec field schema (types, enums, defaults).
+              # 1.3: x-kubernetes-validations CEL immutability rules are on the
+              # tenant and environment field schemas below.
+              required:
+                - tenant
+                - environment
+              properties:
+                tenant:
+                  type: string
+                  pattern: ^[a-z0-9]([a-z0-9-]{1,20})[a-z0-9]$
+                  x-kubernetes-validations:
+                    - rule: self == oldSelf
+                      message: tenant is immutable
+                environment:
+                  type: string
+                  enum:
+                    - dev
+                    - staging
+                    - prod
+                  x-kubernetes-validations:
+                    - rule: self == oldSelf
+                      message: environment is immutable
+                region:
+                  type: string
+                  enum:
+                    - ap-southeast-1
+                    - ap-southeast-2
+                    - ap-northeast-1
+                    - us-east-1
+                  default: ap-southeast-1
+                bucket:
+                  type: object
+                  properties:
+                    versioning:
+                      type: boolean
+                      default: true
+                table:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: false
+                    hashKey:
+                      type: string
+                      default: id
+                    billingMode:
+                      type: string
+                      enum:
+                        - PAY_PER_REQUEST
+                        - PROVISIONED
+                      default: PAY_PER_REQUEST
+                repository:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: false
+            status:
+              type: object
+              # 1.4: reserved status contract. The composition function (out of
+              # scope for this slice) writes these once the composed resources
+              # report ready. None are required. The status subresource is
+              # enabled implicitly for a Crossplane v2 XRD by declaring a status
+              # schema — there is no separate `subresources` stanza as there
+              # would be in a raw CRD.
+              properties:
+                bucketName:
+                  type: string
+                tableName:
+                  type: string
+                repositoryUrl:
+                  type: string

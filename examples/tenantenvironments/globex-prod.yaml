@@ -1,0 +1,17 @@
+apiVersion: platform.hello-crossplane.io/v1alpha1
+kind: TenantEnvironment
+metadata:
+  name: globex-prod
+  namespace: globex-prod
+spec:
+  tenant: globex
+  environment: prod
+  region: ap-southeast-1
+  bucket:
+    versioning: true
+  table:
+    enabled: true
+    hashKey: id
+    billingMode: PAY_PER_REQUEST
+  repository:
+    enabled: true
