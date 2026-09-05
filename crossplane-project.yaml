@@ -1,0 +1,6 @@
+apiVersion: dev.crossplane.io/v1alpha1
+kind: Project
+metadata:
+  name: hello-crossplane-aws
+spec:
+  repository: ghcr.io/hoangviet1vu/hello-crossplane-aws

@@ -24,8 +24,28 @@ profile.cov
 go.work
 go.work.sum
 
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# KCL
+.kclvm/
+
+# Crossplane / Upbound
+.up/
+_output/
+*.xpkg
+
 # env file
 .env
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Editor/IDE
 # .idea/
