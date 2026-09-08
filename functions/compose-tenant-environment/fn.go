@@ -206,6 +206,7 @@ func (f *Function) RunFunction(_ context.Context, req *fnv1.RunFunctionRequest) 
 		Spec: &s3v1beta1.BucketVersioningSpec{
 			ForProvider: &s3v1beta1.BucketVersioningSpecForProvider{
 				Bucket: ptr(names.BucketName),
+				Region: ptr(region),
 				VersioningConfiguration: &s3v1beta1.BucketVersioningSpecForProviderVersioningConfiguration{
 					Status: ptr(VersioningStatus(versioning)),
 				},
