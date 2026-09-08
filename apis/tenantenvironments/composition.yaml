@@ -1,0 +1,34 @@
+# composition.yaml — the TenantEnvironment Composition (hand-maintained).
+#
+# This file was written once and is now hand-maintained. Do NOT re-run
+# `crossplane composition generate`: it rewrites the pipeline. See
+# .kiro/steering/tech.md ("Regenerating is destructive") and design.md.
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: tenantenvironments
+spec:
+  compositeTypeRef:
+    apiVersion: platform.hello-crossplane.io/v1alpha1
+    kind: TenantEnvironment
+  mode: Pipeline
+  pipeline:
+    - step: compose-tenant-environment
+      functionRef:
+        # The render/run engine keys the embedded function by the DNS-label form
+        # of its image repository (spec.repository + "_" + function name),
+        # NOT by the package metadata name. For repository
+        # ghcr.io/hoangviet1vu/hello-crossplane-aws the embedded function image
+        # repo is "hoangviet1vu/hello-crossplane-aws_compose-tenant-environment";
+        # xpkg.ToDNSLabel drops the underscore and joins the namespace with a
+        # hyphen, yielding the name below. Verified with
+        # `crossplane composition render`. Looks like a typo (awscompose, and the
+        # ghcr namespace prefix). It is not — the CLI generates it. Leave it alone.
+        name: hoangviet1vu-hello-crossplane-awscompose-tenant-environment
+    - step: auto-ready
+      functionRef:
+        # Same DNS-label rule as above: function-auto-ready resolves from
+        # xpkg.crossplane.io/crossplane-contrib/function-auto-ready, whose image
+        # repository "crossplane-contrib/function-auto-ready" becomes this name
+        # via xpkg.ToDNSLabel. It must be declared in crossplane-project.yaml.
+        name: crossplane-contrib-function-auto-ready
