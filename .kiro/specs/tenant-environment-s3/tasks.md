@@ -63,7 +63,7 @@ language selection is needed).
     - rapid generator over empty/whitespace-only tenant or environment; assert `BuildNames` returns an error and no names; ≥100 iterations; tagged comment
     - _Requirements: 2.7, 3.6_
 
-- [ ] 5. Checkpoint - naming module compiles and its tests pass
+- [x] 5. Checkpoint - naming module compiles and its tests pass
   - Run `gofmt -l .`, `go vet ./...`, and `go test ./...` in `functions/compose-tenant-environment`; ensure all tests pass, ask the user if questions arise
 
 - [x] 6. Implement `RunFunction` core and the Bucket resource
@@ -157,11 +157,11 @@ language selection is needed).
     - `map[string]struct{...}` + `t.Run`, compared with `go-cmp`: expected desired output for `acme-dev` (versioning defaulted/enabled, table & repo disabled) and `globex-prod` (versioning explicitly true); malformed XR → `Fatal` targeted at the composite with zero desired resources; R4.8 guard path (bucket missing → no versioning + error) driven by crafted internal state
     - _Requirements: 7.1, 7.2, 4.8_
 
-- [ ] 10. Checkpoint - full function compiles and all Go checks pass
+- [x] 10. Checkpoint - full function compiles and all Go checks pass
   - Run `gofmt -l .` (must print nothing), `go vet ./...` (clean), and `go test ./...` (all tests pass, including property and table-driven tests) in `functions/compose-tenant-environment`; ensure all tests pass, ask the user if questions arise
   - _Requirements: 8.1, 8.2, 8.3_
 
-- [ ] 11. Verify the composition render integration gate
+- [x] 11. Verify the composition render integration gate
   - Run `crossplane composition render examples/tenantenvironments/acme-dev.yaml apis/tenantenvironments/composition.yaml` and `crossplane composition render examples/tenantenvironments/globex-prod.yaml apis/tenantenvironments/composition.yaml`; each must exit `0` and emit no error
   - If render fails for any example, treat the definition of done as not met, identify the failing example, and fix the function/composition (a failure here is a wiring or model-usage bug, not a test-only concern)
   - _Requirements: 8.4, 8.6_
