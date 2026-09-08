@@ -54,6 +54,18 @@ type fntVersioningWant struct {
 	StatusValue string
 }
 
+// fntRepositoryWant is the observable slice of a desired Repository (ECR)
+// resource asserted by a table case: apiVersion/Kind, namespace, external name,
+// region, and the three standard tags.
+type fntRepositoryWant struct {
+	APIVersion   string
+	Kind         string
+	Namespace    string
+	ExternalName string
+	Region       string
+	Tags         map[string]string
+}
+
 // fntBuildRequest synthesises a RunFunctionRequest whose observed composite is a
 // TenantEnvironment carrying the given spec. Absent fields are genuinely omitted
 // so the function's default/guard paths are exercised, mirroring how the render
@@ -187,6 +199,25 @@ func fntProjectVersioning(content map[string]any) fntVersioningWant {
 	}
 }
 
+// fntProjectRepository extracts the observable Repository slice from a desired
+// composed resource's unstructured content.
+func fntProjectRepository(content map[string]any) fntRepositoryWant {
+	apiVersion, _ := fntGetString(content, "apiVersion")
+	kind, _ := fntGetString(content, "kind")
+	ns, _ := fntGetString(content, "metadata", "namespace")
+	extName, _ := fntGetString(content, "metadata", "annotations", externalNameAnnotation)
+	region, _ := fntGetString(content, "spec", "forProvider", "region")
+	tags := fntGetStringMap(content, "spec", "forProvider", "tags")
+	return fntRepositoryWant{
+		APIVersion:   apiVersion,
+		Kind:         kind,
+		Namespace:    ns,
+		ExternalName: extName,
+		Region:       region,
+		Tags:         tags,
+	}
+}
+
 // TestRunFunction is the table-driven wiring/edge-case suite for RunFunction. It
 // covers the two example XRs (acme-dev, globex-prod), a malformed XR that must
 // yield a fatal result and zero desired resources, and — as far as the public
@@ -201,6 +232,7 @@ func TestRunFunction(t *testing.T) {
 		resourceCount int                // exact number of desired composed resources
 		bucket        *fntBucketWant     // nil → do not assert the bucket projection
 		versioning    *fntVersioningWant // nil → do not assert the versioning projection
+		repository    *fntRepositoryWant // nil → assert the "repository" key is ABSENT
 	}
 
 	cases := map[string]struct {
@@ -243,8 +275,9 @@ func TestRunFunction(t *testing.T) {
 
 		// examples/tenantenvironments/globex-prod.yaml: tenant=globex,
 		// environment=prod, region ap-southeast-1, bucket.versioning explicitly
-		// true → Enabled, table & repo enabled (must NOT add extra resources in
-		// this S3-only slice).
+		// true → Enabled, table & repo enabled. repository.enabled: true adds a
+		// third desired resource, the ECR Repository, so the keyset is
+		// {bucket, bucket-versioning, repository}.
 		"globex-prod": {
 			spec: fntSpec{
 				tenant:       "globex",
@@ -255,7 +288,7 @@ func TestRunFunction(t *testing.T) {
 				repoEnabled:  true,
 			},
 			want: want{
-				resourceCount: 2,
+				resourceCount: 3,
 				bucket: &fntBucketWant{
 					APIVersion:   "s3.aws.m.upbound.io/v1beta1",
 					Kind:         "Bucket",
@@ -274,6 +307,18 @@ func TestRunFunction(t *testing.T) {
 					Namespace:   "globex-prod",
 					Bucket:      "globex-prod-bucket",
 					StatusValue: "Enabled",
+				},
+				repository: &fntRepositoryWant{
+					APIVersion:   "ecr.aws.m.upbound.io/v1beta1",
+					Kind:         "Repository",
+					Namespace:    "globex-prod",
+					ExternalName: "globex-prod-ecr",
+					Region:       "ap-southeast-1",
+					Tags: map[string]string{
+						"tenant":      "globex",
+						"environment": "prod",
+						"managed-by":  "crossplane",
+					},
 				},
 			},
 		},
@@ -373,6 +418,23 @@ func TestRunFunction(t *testing.T) {
 					t.Errorf("versioning references bucket %q; want the composed bucket external name %q",
 						got.Bucket, tc.want.bucket.ExternalName)
 				}
+			}
+
+			// Repository (ECR) is optional and gated by spec.repository.enabled.
+			// A non-nil want.repository asserts the projection; a nil one asserts
+			// the "repository" key is absent entirely (the disabled path must not
+			// emit the resource at all).
+			if tc.want.repository != nil {
+				r, ok := desired[keyRepository]
+				if !ok {
+					t.Fatalf("desired resources missing key %q", keyRepository)
+				}
+				got := fntProjectRepository(r.Resource.UnstructuredContent())
+				if diff := cmp.Diff(*tc.want.repository, got); diff != "" {
+					t.Errorf("repository projection mismatch (-want +got):\n%s", diff)
+				}
+			} else if _, ok := desired[keyRepository]; ok {
+				t.Errorf("desired resources contain key %q; want it absent (repository disabled)", keyRepository)
 			}
 		})
 	}

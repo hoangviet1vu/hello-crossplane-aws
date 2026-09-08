@@ -12,6 +12,7 @@ import (
 
 	fnv1 "github.com/crossplane/function-sdk-go/proto/v1"
 	"github.com/crossplane/function-sdk-go/request"
+	"github.com/crossplane/function-sdk-go/resource"
 )
 
 // p5NamespacedS3APIVersion is the ONLY apiVersion any composed S3 resource may
@@ -146,9 +147,17 @@ func TestProperty5NamespacedGroupAndKind(t *testing.T) {
 			t.Fatalf("GetDesiredComposedResources(%+v) error: %v", s, err)
 		}
 
-		// Every emitted resource must use the namespaced S3 apiVersion. The
-		// legacy cluster-scoped group must never appear on any resource.
-		for name, dcd := range dcds {
+		// Every emitted S3 resource must use the namespaced S3 apiVersion, and
+		// the legacy cluster-scoped S3 group must never appear on one. This
+		// property is scoped to the S3 composition keys (bucket,
+		// bucket-versioning): the optional ECR "repository" resource lives in a
+		// different (ecr.aws.m.upbound.io) group and is covered by P-ECR-2, so
+		// it is skipped here to keep this S3 invariant valid and non-duplicative.
+		for _, name := range []resource.Name{keyBucket, keyBucketVersioning} {
+			dcd, ok := dcds[name]
+			if !ok {
+				continue
+			}
 			gotAPIVersion := dcd.Resource.GetAPIVersion()
 			if gotAPIVersion != p5NamespacedS3APIVersion {
 				t.Fatalf("desired resource %q apiVersion = %q; want %q (spec=%+v)",

@@ -7,6 +7,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"strings"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -24,6 +25,7 @@ import (
 	"github.com/crossplane/function-sdk-go/response"
 
 	metav1 "dev.crossplane.io/models/io/k8s/meta/v1"
+	ecrv1beta1 "dev.crossplane.io/models/io/upbound/m/aws/ecr/v1beta1"
 	s3v1beta1 "dev.crossplane.io/models/io/upbound/m/aws/s3/v1beta1"
 )
 
@@ -42,6 +44,7 @@ func ptr[T any](v T) *T { return &v }
 const (
 	keyBucket           resource.Name = "bucket"
 	keyBucketVersioning resource.Name = "bucket-versioning"
+	keyRepository       resource.Name = "repository"
 )
 
 // defaultRegion is the XRD default for spec.region. The XRD normally populates
@@ -214,12 +217,56 @@ func (f *Function) RunFunction(_ context.Context, req *fnv1.RunFunctionRequest) 
 		},
 	}
 
-	// Populate status.bucketName from the CURRENT observed bucket readiness
-	// (R5). status is derived fresh from the observed composed bucket's Ready
-	// condition on every reconcile — it is never latched — so a ready→not-ready
-	// transition naturally clears it (R5.3). status.tableName and
-	// status.repositoryUrl are left unset in this slice (R5.5, R5.6).
-	if err := f.populateStatus(req, rsp, names); err != nil {
+	// Resolve repository.enabled. Absent means false (the schema default) → no
+	// Repository composed (R2.2, R2.3).
+	repoEnabled := false
+	if v, verr := paved.GetBool("spec.repository.enabled"); verr != nil {
+		if !fieldpath.IsNotFound(verr) {
+			response.Fatal(rsp, errors.Wrap(verr, "cannot read spec.repository.enabled from observed XR"))
+			return rsp, nil
+		}
+	} else {
+		repoEnabled = v
+	}
+
+	// Compose the ECR Repository only when enabled (R2.1). When disabled/absent
+	// the key is never added to desired, so no Repository resource exists (R2.2,
+	// R2.3). The AWS name is carried by the crossplane.io/external-name
+	// annotation (<tenant>-<env>-ecr); metadata.name is deliberately left unset
+	// so it is never derived from tenant/environment (R2.8, R3.3, R3.4). The
+	// resource is placed in the XR's namespace <tenant>-<env> (R2.5) and uses
+	// the namespaced .m. API group (R2.4, R6.6). Unlike BucketVersioning, the
+	// Repository model exposes spec.forProvider.tags, so the standard tag set
+	// applies here via the already-computed tags (R4.1, R4.2, R4.3, R6.8). Only
+	// Region and Tags are set — no EncryptionConfiguration,
+	// ImageScanningConfiguration, ImageTagMutability, ForceDelete, etc. (R6.7).
+	if repoEnabled {
+		desired[keyRepository] = &ecrv1beta1.Repository{
+			APIVersion: ptr(ecrv1beta1.RepositoryAPIVersionEcrAwsMUpboundIoV1Beta1),
+			Kind:       ptr(ecrv1beta1.RepositoryKindRepository),
+			Metadata: &metav1.ObjectMeta{
+				Namespace: ptr(names.Namespace),
+				Annotations: ptr(map[string]string{
+					externalNameAnnotation: names.RepositoryName,
+				}),
+			},
+			Spec: &ecrv1beta1.RepositorySpec{
+				ForProvider: &ecrv1beta1.RepositorySpecForProvider{
+					Region: ptr(region),
+					Tags:   ptr(tags),
+				},
+			},
+		}
+	}
+
+	// Populate status from the CURRENT observed resource readiness (R5). status
+	// is derived fresh from the observed composed resources' Ready conditions on
+	// every reconcile — it is never latched — so a ready→not-ready transition
+	// naturally clears it (R5.3, R5.7). status.bucketName mirrors the ready
+	// bucket; status.repositoryUrl mirrors the observed Repository's provider-
+	// reported URL when the repository is enabled and Ready. status.tableName is
+	// left unset in this slice (DynamoDB out of scope).
+	if err := f.populateStatus(req, rsp, names, repoEnabled); err != nil {
 		response.Fatal(rsp, errors.Wrap(err, "cannot populate status"))
 		return rsp, nil
 	}
@@ -227,45 +274,70 @@ func (f *Function) RunFunction(_ context.Context, req *fnv1.RunFunctionRequest) 
 	return rsp, nil
 }
 
-// populateStatus sets status.bucketName on the desired composite resource when
-// the observed composed bucket reports Ready, and leaves it unset otherwise.
+// populateStatus sets status fields on the desired composite resource from the
+// CURRENT observed composed resources, and leaves each field unset otherwise.
 //
-// The desired composite is initialised from the observed composite, so reading
-// it back and setting only status.bucketName preserves the rest of the XR. When
-// the bucket is not Ready the field is left untouched, which — because the
-// desired composite starts from the observed one each reconcile and the value
-// is re-derived every time rather than latched — means status reflects only a
-// currently-ready bucket (R5.1, R5.2, R5.3, R5.4).
-func (f *Function) populateStatus(req *fnv1.RunFunctionRequest, rsp *fnv1.RunFunctionResponse, names Names) error {
+// The desired composite is paved once from the observed composite, so setting
+// only the fields that currently apply preserves the rest of the XR. Every
+// value is re-derived from the observed state each reconcile rather than
+// latched, so a ready→not-ready transition naturally clears it:
+//
+//   - status.bucketName is set to the bucket external name (byte-for-byte) when
+//     the observed bucket reports Ready, else left unset (R5-of-S3).
+//   - status.repositoryUrl mirrors the observed Repository's
+//     status.atProvider.repositoryUrl when the repository is enabled AND the
+//     observed Repository reports Ready AND the URL is present and
+//     non-whitespace; otherwise it is left unset. The disabled branch never
+//     inspects the observed Repository, so a stale observed Repository cannot
+//     leak into status once disabled (R5.1–R5.7).
+//   - status.tableName is left unset (DynamoDB out of scope).
+func (f *Function) populateStatus(req *fnv1.RunFunctionRequest, rsp *fnv1.RunFunctionResponse, names Names, repoEnabled bool) error {
 	observed, err := request.GetObservedComposedResources(req)
 	if err != nil {
 		return errors.Wrap(err, "cannot get observed composed resources")
 	}
 
-	// The bucket may not be observed yet (first reconcile, before the provider
-	// has reported anything back). Absent or not-Ready both mean "leave
-	// status.bucketName unset".
-	bucket, ok := observed[keyBucket]
-	if !ok {
-		return nil
-	}
-	if bucket.Resource.GetCondition(xpv2.TypeReady).Status != corev1.ConditionTrue {
-		return nil
-	}
-
-	// The bucket is Ready: set status.bucketName to the bucket external name,
-	// byte-for-byte, on the desired composite (R5.1, R5.4).
+	// Pave the desired composite once. It is initialised from the observed
+	// composite, so untouched status fields are preserved.
 	dxr, err := request.GetDesiredCompositeResource(req)
 	if err != nil {
 		return errors.Wrap(err, "cannot get desired composite resource")
 	}
-	if err := fieldpath.Pave(dxr.Resource.Object).SetString("status.bucketName", names.BucketName); err != nil {
-		return errors.Wrap(err, "cannot set status.bucketName on desired composite resource")
+	paved := fieldpath.Pave(dxr.Resource.Object)
+
+	// --- status.bucketName (unchanged S3 behavior) ---
+	// The bucket may not be observed yet (first reconcile). Absent or not-Ready
+	// both mean "leave status.bucketName unset". When Ready, set it to the
+	// bucket external name byte-for-byte (R5.1, R5.4 of the S3 slice).
+	if bucket, ok := observed[keyBucket]; ok &&
+		bucket.Resource.GetCondition(xpv2.TypeReady).Status == corev1.ConditionTrue {
+		if err := paved.SetString("status.bucketName", names.BucketName); err != nil {
+			return errors.Wrap(err, "cannot set status.bucketName on desired composite resource")
+		}
 	}
-	if err := response.SetDesiredCompositeResource(rsp, dxr); err != nil {
-		return errors.Wrap(err, "cannot set desired composite resource")
+
+	// --- status.repositoryUrl (this slice) ---
+	// Set ONLY when the repository is enabled AND the observed Repository is
+	// Ready AND its atProvider.repositoryUrl is present and non-whitespace.
+	// Otherwise the field is left absent. Derived fresh every reconcile from the
+	// current observed state — never latched — so enabled→disabled or
+	// ready→not-ready naturally clears it (R5.2, R5.3, R5.5, R5.7).
+	if repoEnabled {
+		if repo, ok := observed[keyRepository]; ok &&
+			repo.Resource.GetCondition(xpv2.TypeReady).Status == corev1.ConditionTrue {
+			url, uerr := fieldpath.Pave(repo.Resource.Object).GetString("status.atProvider.repositoryUrl")
+			if uerr != nil && !fieldpath.IsNotFound(uerr) {
+				return errors.Wrap(uerr, "cannot read status.atProvider.repositoryUrl from observed repository")
+			}
+			if strings.TrimSpace(url) != "" {
+				if err := paved.SetString("status.repositoryUrl", url); err != nil {
+					return errors.Wrap(err, "cannot set status.repositoryUrl on desired composite resource")
+				}
+			}
+		}
 	}
-	return nil
+
+	return response.SetDesiredCompositeResource(rsp, dxr)
 }
 
 // toDesiredComposed converts the assembled map of typed managed-resource models
