@@ -231,7 +231,28 @@ Two things to get right:
 - **Tags must be semantic versions, and packages are cached by tag.** Always bump
   rather than overwrite.
 
-`push` reuses your Docker credentials, so `docker login ghcr.io` first.
+`push` reuses your Docker credentials, so `docker login ghcr.io` first. Use a
+GitHub PAT with `write:packages` scope, passed via stdin rather than as a CLI
+argument:
+
+```bash
+export GITHUB_PAT=<github-pat-token>
+export GITHUB_ACTOR=<github-username>
+echo "$GITHUB_PAT" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+```
+
+`build` has no `--tag` flag — tagging happens at `push`. For an untagged main
+build, compute the version from the commit instead of hardcoding one:
+
+```bash
+TAG="v0.0.0-$(git rev-parse --short HEAD)"
+
+crossplane project build --repository=ghcr.io/hoangviet1vu/hello-crossplane-aws
+crossplane project push  --repository=ghcr.io/hoangviet1vu/hello-crossplane-aws --tag="$TAG"
+```
+
+This is the same `v0.0.0-<short-sha>` scheme the CI versioning table below uses
+for merges to `main`.
 
 ### Installing on a real cluster
 
