@@ -1,0 +1,27 @@
+# cluster/providerconfig.yaml — bootstrap ONLY, never part of the built xpkg.
+#
+# ProviderConfig is credential wiring for the AWS providers, not package
+# content. It lives under cluster/ (not apis/ or examples/) so it never ends up
+# inside the built Configuration package. Apply it separately, e.g.:
+#
+#   crossplane project run --extra-resources=cluster/providerconfig.yaml
+#
+# This config points the providers at the aws-secret Secret created with:
+#
+#   kubectl create secret generic aws-secret -n crossplane-system \
+#     --from-file=creds=$HOME/.aws/credentials
+#
+# The principal in those credentials must have the S3, DynamoDB, and ECR
+# permissions required to provision the resources; missing permissions surface
+# as AccessDenied on the managed resource's status/events.
+apiVersion: aws.m.upbound.io/v1beta1
+kind: ClusterProviderConfig
+metadata:
+  name: default
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: aws-secret
+      key: creds

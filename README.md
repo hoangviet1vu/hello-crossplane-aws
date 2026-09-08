@@ -231,16 +231,67 @@ Two things to get right:
 - **Tags must be semantic versions, and packages are cached by tag.** Always bump
   rather than overwrite.
 
-`push` reuses your Docker credentials, so `docker login ghcr.io` first. Installing
-on a real cluster afterwards:
+`push` reuses your Docker credentials, so `docker login ghcr.io` first. Use a
+GitHub PAT with `write:packages` scope, passed via stdin rather than as a CLI
+argument:
 
 ```bash
+export GITHUB_PAT=<github-pat-token>
+export GITHUB_ACTOR=<github-username>
+echo "$GITHUB_PAT" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+```
+
+`build` has no `--tag` flag — tagging happens at `push`. For an untagged main
+build, compute the version from the commit instead of hardcoding one:
+
+```bash
+TAG="v0.0.0-$(git rev-parse --short HEAD)"
+
+crossplane project build --repository=ghcr.io/hoangviet1vu/hello-crossplane-aws
+crossplane project push  --repository=ghcr.io/hoangviet1vu/hello-crossplane-aws --tag="$TAG"
+```
+
+This is the same `v0.0.0-<short-sha>` scheme the CI versioning table below uses
+for merges to `main`.
+
+### Installing on a real cluster
+
+`crossplane project run` only ever creates and manages its own local KIND
+cluster — it cannot target an existing cluster (k3d, AKS, or anything else).
+To install the published package on a real, persistent cluster, point `kubectl`
+at it and use `crossplane xpkg install` instead:
+
+```bash
+# Bootstrap resources (kubectl apply, not part of the package)
+kubectl apply -f cluster/providerconfig.yaml
+kubectl apply -f cluster/imageconfig.yaml   # only needed if the package is private
+
+# Install
 crossplane xpkg install configuration \
-  ghcr.io/hoangviet1vu/hello-crossplane-aws:v0.1.0 --wait=5m
+  ghcr.io/hoangviet1vu/hello-crossplane-aws:v0.1.0 \
+  --package-pull-secrets=ghcr-creds --wait=5m
 ```
 
 The package manager pulls the providers and the embedded function automatically —
 they are dependencies of the Configuration.
+
+GHCR packages default to private. `cluster/imageconfig.yaml` matches images under
+`ghcr.io/hoangviet1vu` and points them at a `ghcr-creds` pull secret in
+`crossplane-system`:
+
+```bash
+kubectl create secret docker-registry ghcr-creds \
+  -n crossplane-system \
+  --docker-server=ghcr.io \
+  --docker-username=hoangviet1vu \
+  --docker-password="$GITHUB_PAT" \
+  --docker-email=unused@example.com
+```
+
+The PAT only needs `read:packages`; it does not need the `write:packages` scope
+used to push. Pass `--package-pull-secrets` to `xpkg install` explicitly too —
+`ImageConfig` covers automatic reconciliation pulls, but the initial install still
+needs the secret named on the command.
 
 ## Versioning and CI
 

@@ -21,3 +21,12 @@ For end-user setup and background, see `README.md`.
 
 Agents not running inside Kiro should read the three steering files directly —
 they contain everything formerly duplicated here.
+
+## Never commit build artifacts
+
+Binary files generated during testing or verification (for example the
+compiled embedded function produced by `go build` or
+`crossplane composition render`) must be Git-ignored, never committed. The
+compiled `compose-tenant-environment` function binary in particular shares its
+module directory name and has no extension, so add an explicit `.gitignore`
+entry when a new build output is not already covered.

@@ -1,0 +1,285 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Create the XRD identity and version block": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618546196
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618561828
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618864891
+      }
+    ],
+    "1.2 Define the `spec` OpenAPI schema with types, enums, and defaults": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618546673
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618873630
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618929918
+      }
+    ],
+    "1.3 Add the CEL immutability rules on identity fields": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618546988
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618936201
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618989446
+      }
+    ],
+    "1.4 Enable the status subresource and declare status fields": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618547373
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618990361
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619041114
+      }
+    ],
+    "2.1 Write the SimpleSchema source mirroring the XRD shape": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618547801
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619047378
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619657540
+      }
+    ],
+    "3.1 Create the disabled variant example": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618548133
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618566640
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618866140
+      }
+    ],
+    "3.2 Create the fully-enabled variant example": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618548501
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618567515
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618867080
+      }
+    ],
+    "4.1 Initialize the test module and dependencies": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618548974
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618568590
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618868034
+      }
+    ],
+    "5.1 Property test — tenant name pattern accept/reject": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618549394
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619665240
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619898104
+      }
+    ],
+    "5.2 Property test — schema.yaml <-> definition.yaml parity": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618549804
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619666458
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619899093
+      }
+    ],
+    "6.1 Assert XRD identity and status structure": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618550174
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619668002
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619900027
+      }
+    ],
+    "6.2 Assert CEL rules present with exact messages": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618550543
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619668976
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788620025310
+      }
+    ],
+    "6.3 Assert example shape": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618550977
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619669881
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788620026144
+      }
+    ],
+    "7. Checkpoint — validate the artifacts": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618551403
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788620033084
+      },
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788620243005
+      }
+    ],
+    "3. Author the example resources": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618867491
+      }
+    ],
+    "4. Set up the Go guard-test module": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788618868365
+      }
+    ],
+    "1. Author the XRD (`definition.yaml`) as the authoritative API": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619041616
+      }
+    ],
+    "2. Author `schema.yaml` as documentation, consistent with the XRD": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619657904
+      }
+    ],
+    "5. Property-based tests": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788619899534
+      }
+    ],
+    "6. Static / structural assertion tests": [
+      {
+        "executionId": "498d72e7-c0f4-4913-ba74-8301ea627709",
+        "chatSessionId": "sess_9102c4ea-a7c8-4d5b-a321-8279f8d08b03",
+        "timestamp": 1788620026707
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+apiVersion: platform.hello-crossplane.io/v1alpha1
+kind: TenantEnvironment
+metadata:
+  name: acmexxx-dev
+  namespace: acmexxx-dev
+spec:
+  tenant: acmexxx
+  environment: dev
+  table:
+    enabled: false
+  repository:
+    enabled: false

@@ -1,0 +1,484 @@
+{
+  "pbtResults": {
+    "4.4 Write property test: naming rejects empty or whitespace input": {
+      "status": "passed",
+      "lastRunTimestamp": 1788857975383
+    },
+    "9.2 Write property test: invalid spec yields a fatal result and no resources": {
+      "status": "passed",
+      "lastRunTimestamp": 1788859884825
+    }
+  },
+  "executionHistory": {
+    "1. Confirm the S3 provider dependency and generated models": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857235
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852868930
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857634531
+      }
+    ],
+    "2. Create the Composition pipeline": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857333
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852874130
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857635518
+      }
+    ],
+    "3. Scaffold the embedded function module": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857357
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852875250
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857636586
+      }
+    ],
+    "4.1 Implement `naming.go` with no Crossplane imports": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857392
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857641959
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857779724
+      }
+    ],
+    "4.2 Write table-driven unit tests for `naming.go` in `naming_test.go`": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857437
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857786243
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857993187
+      }
+    ],
+    "4.3 Write property test: name derivation is deterministic": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857500
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857787582
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857994172
+      }
+    ],
+    "4.4 Write property test: naming rejects empty or whitespace input": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857535
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857788468
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857995272
+      }
+    ],
+    "5. Checkpoint - naming module compiles and its tests pass": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857566
+      },
+      {
+        "executionId": "c2992489-c733-4dd8-b50e-e9d1a26998d8",
+        "chatSessionId": "sess_78884bda-8641-407b-af2c-6426b46f3a93",
+        "timestamp": 1788863870522
+      },
+      {
+        "executionId": "c2992489-c733-4dd8-b50e-e9d1a26998d8",
+        "chatSessionId": "sess_78884bda-8641-407b-af2c-6426b46f3a93",
+        "timestamp": 1788864344244
+      }
+    ],
+    "6.1 Implement the `fn.go` entrypoint and observed-XR read": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857592
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858007602
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858402214
+      }
+    ],
+    "6.2 Build the Bucket managed resource under map key `bucket`": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857626
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858407865
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858568853
+      }
+    ],
+    "6.3 Write property test: the bucket is always composed": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857670
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858578241
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858832923
+      }
+    ],
+    "6.4 Write property test: bucket external name format and no metadata-name derivation": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857761
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858580690
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858831744
+      }
+    ],
+    "7.1 Build the BucketVersioning managed resource under map key `bucket-versioning`": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857792
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858577056
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858834077
+      }
+    ],
+    "7.2 Write property test: versioning status maps from the spec flag": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857835
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858845027
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859320087
+      }
+    ],
+    "7.3 Write property test: namespace consistency and versioning-to-bucket reference": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857858
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858846146
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859321313
+      }
+    ],
+    "7.4 Write property test: every composed resource uses the namespaced S3 group and correct Kind": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857901
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858847428
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859322710
+      }
+    ],
+    "7.5 Write property test: exactly two resources are composed": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857942
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858848430
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859323887
+      }
+    ],
+    "7.6 Write property test: composed resources carry exactly the standard tag set": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852857977
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859339549
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859459953
+      }
+    ],
+    "8.1 Populate `status.bucketName` from current bucket readiness": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852858021
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858843585
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859324848
+      }
+    ],
+    "8.2 Write property test: status bucket name reflects current bucket readiness": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852858066
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859468187
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859702088
+      }
+    ],
+    "9.1 Surface fatal, warning, and guard errors on the XR": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852858090
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859467290
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859703181
+      }
+    ],
+    "9.2 Write property test: invalid spec yields a fatal result and no resources": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852858124
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859709489
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859942172
+      }
+    ],
+    "9.3 Write table-driven unit tests for wiring and edge cases in `fn_test.go`": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852858160
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859710599
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859943366
+      }
+    ],
+    "10. Checkpoint - full function compiles and all Go checks pass": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852858191
+      },
+      {
+        "executionId": "c2992489-c733-4dd8-b50e-e9d1a26998d8",
+        "chatSessionId": "sess_78884bda-8641-407b-af2c-6426b46f3a93",
+        "timestamp": 1788863871222
+      },
+      {
+        "executionId": "c2992489-c733-4dd8-b50e-e9d1a26998d8",
+        "chatSessionId": "sess_78884bda-8641-407b-af2c-6426b46f3a93",
+        "timestamp": 1788864345454
+      }
+    ],
+    "11. Verify the composition render integration gate": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788852858226
+      },
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859949449
+      },
+      {
+        "executionId": "c2992489-c733-4dd8-b50e-e9d1a26998d8",
+        "chatSessionId": "sess_78884bda-8641-407b-af2c-6426b46f3a93",
+        "timestamp": 1788863871623
+      },
+      {
+        "executionId": "c2992489-c733-4dd8-b50e-e9d1a26998d8",
+        "chatSessionId": "sess_78884bda-8641-407b-af2c-6426b46f3a93",
+        "timestamp": 1788863888164
+      },
+      {
+        "executionId": "c2992489-c733-4dd8-b50e-e9d1a26998d8",
+        "chatSessionId": "sess_78884bda-8641-407b-af2c-6426b46f3a93",
+        "timestamp": 1788864346344
+      }
+    ],
+    "4. Implement the pure naming and mapping module": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788857995339
+      }
+    ],
+    "6. Implement `RunFunction` core and the Bucket resource": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788858832948
+      }
+    ],
+    "7. Implement the BucketVersioning resource": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859459999
+      }
+    ],
+    "8. Implement status population from observed bucket readiness": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859702149
+      }
+    ],
+    "9. Implement error handling through the composition response": [
+      {
+        "executionId": "6f072a9f-d1c2-46c9-93fb-9b49ae12f766",
+        "chatSessionId": "sess_a2e09a68-57a8-4749-aaec-50710bfc9359",
+        "timestamp": 1788859943405
+      }
+    ]
+  }
+}

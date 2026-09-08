@@ -1,0 +1,46 @@
+# schema.yaml — SimpleSchema source for the TenantEnvironment API.
+#
+# AUTHORITATIVE FILE IS definition.yaml, NOT THIS ONE.
+#
+# This document is the Crossplane SimpleSchema source the XRD was first
+# generated from (`crossplane xrd generate apis/tenantenvironments/schema.yaml
+# --from simpleschema`). It is now kept only as human-readable documentation of
+# the API shape.
+#
+# Do NOT re-run `crossplane xrd generate`. SimpleSchema cannot express CEL
+# `x-kubernetes-validations`, so regenerating silently DELETES the tenant name
+# pattern (`^[a-z0-9]([a-z0-9-]{1,20})[a-z0-9]$`) and the `self == oldSelf`
+# immutability rules on `tenant` and `environment` from definition.yaml. See
+# .kiro/steering/tech.md ("Regenerating is destructive") and design.md.
+#
+# Keep this file and definition.yaml in sync BY HAND. If you change the API
+# shape (a field, type, enum set, or default) in one, make the identical change
+# in the other. The only things that intentionally live in definition.yaml but
+# not here are the CEL rules and the tenant `pattern` above — SimpleSchema
+# cannot represent them, so they are excluded from the parity check.
+apiVersion: platform.hello-crossplane.io/v1alpha1
+kind: TenantEnvironment
+spec:
+  # Tenant identity. The tenant name pattern and the immutability rule live in
+  # definition.yaml as CEL/OpenAPI validations that SimpleSchema cannot express.
+  tenant: string | required=true description="Tenant that owns this environment"
+  environment: string | required=true enum="dev,staging,prod" description="Deployment environment; immutable after creation"
+  # Region allow-list; ap-southeast-1 (Singapore) is the default.
+  region: string | default="ap-southeast-1" enum="ap-southeast-1,ap-southeast-2,ap-northeast-1,us-east-1" description="AWS region from the supported allow-list"
+  # S3 bucket is always created; only its versioning is configurable here.
+  bucket:
+    versioning: boolean | default=true description="Enable S3 bucket versioning"
+  # DynamoDB table is optional, gated by table.enabled.
+  table:
+    enabled: boolean | default=false description="Provision a DynamoDB table"
+    hashKey: string | default="id" description="DynamoDB partition (hash) key name"
+    billingMode: string | default="PAY_PER_REQUEST" enum="PAY_PER_REQUEST,PROVISIONED" description="DynamoDB billing mode"
+  # ECR repository is optional, gated by repository.enabled.
+  repository:
+    enabled: boolean | default=false description="Provision an ECR repository"
+status:
+  # Reserved status contract. The composition function populates these once the
+  # composed AWS resources report ready. None are required on create.
+  bucketName: string | description="Name of the provisioned S3 bucket"
+  tableName: string | description="Name of the provisioned DynamoDB table"
+  repositoryUrl: string | description="URL of the provisioned ECR repository"
