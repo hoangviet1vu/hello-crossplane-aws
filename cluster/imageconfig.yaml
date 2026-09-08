@@ -1,0 +1,33 @@
+# cluster/imageconfig.yaml — bootstrap ONLY, never part of the built xpkg.
+#
+# ImageConfig tells Crossplane which pull secret to use when fetching package
+# (and MR) images whose path matches the given prefix. It lives under cluster/
+# (not apis/ or examples/) so it never ends up inside the built Configuration
+# package. Apply it before installing the Configuration, e.g.:
+#
+#   crossplane project run --init-resources=cluster/imageconfig.yaml
+#
+# This config matches ghcr.io/hoangviet1vu/* images and points them at the
+# ghcr-creds Secret created with:
+#
+#   kubectl create secret docker-registry ghcr-creds \
+#     -n crossplane-system \
+#     --docker-server=ghcr.io \
+#     --docker-username=hoangviet1vu \
+#     --docker-password="$GITHUB_PAT" \
+#     --docker-email=unused@example.com
+#
+# The PAT only needs read:packages (pull) access; it does not need the
+# write:packages scope used to push the package.
+apiVersion: pkg.crossplane.io/v1beta1
+kind: ImageConfig
+metadata:
+  name: ghcr-hoangviet1vu
+spec:
+  matchImages:
+    - type: Prefix
+      prefix: ghcr.io/hoangviet1vu
+  registry:
+    authentication:
+      pullSecretRef:
+        name: ghcr-creds
