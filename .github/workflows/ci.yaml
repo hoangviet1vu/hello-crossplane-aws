@@ -1,0 +1,160 @@
+# The only workflow for this repo. See .kiro/steering/tech.md#ci-and-versioning
+# for the fixed versioning and registry rules.
+#
+#   Trigger         Registry                                          Version
+#   ------------------------------------------------------------------------------
+#   pull_request    — (nothing pushed)                                —
+#   push to main    ghcr.io/hoangviet1vu/hello-crossplane-aws-dev     v0.0.0-<short-sha>
+#   tag v*          ghcr.io/hoangviet1vu/hello-crossplane-aws         <tag>   (not wired yet)
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+# GHCR login uses the built-in token; project push reuses Docker credentials.
+permissions:
+  contents: read
+  packages: write
+
+env:
+  # Pin the CLI — the project workflow is [BETA] and an unpinned install can
+  # change under CI. Bump deliberately.
+  XP_VERSION: v2.5.0
+  # Default (release) repo, used by the tag flow later. The main-merge job
+  # overrides this with the -dev repo.
+  RELEASE_REPO: ghcr.io/hoangviet1vu/hello-crossplane-aws
+  DEV_REPO: ghcr.io/hoangviet1vu/hello-crossplane-aws-dev
+  FUNCTION_DIR: functions/compose-tenant-environment
+
+jobs:
+  # Runs on every PR and every push to main. Never pushes a package.
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: ${{ env.FUNCTION_DIR }}/go.mod
+
+      - name: gofmt
+        working-directory: ${{ env.FUNCTION_DIR }}
+        run: |
+          unformatted="$(gofmt -l .)"
+          if [ -n "${unformatted}" ]; then
+            echo "These files are not gofmt -s formatted:"
+            echo "${unformatted}"
+            exit 1
+          fi
+
+      - name: go vet
+        working-directory: ${{ env.FUNCTION_DIR }}
+        run: go vet ./...
+
+      - name: go test
+        working-directory: ${{ env.FUNCTION_DIR }}
+        run: go test ./...
+
+      - name: Install Crossplane CLI
+        run: |
+          # R7.3: refuse to install with an unpinned CLI.
+          [ -n "${XP_VERSION}" ] || { echo "XP_VERSION is unset/empty"; exit 1; }
+          curl -sL "https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh" | sh
+          sudo mv crossplane /usr/local/bin/
+          crossplane version --client
+          # R7.4: confirm install.sh honoured the pin and did not fall back.
+          crossplane version --client | grep -qx "Client Version: ${XP_VERSION}" || {
+            echo "CLI version mismatch: expected ${XP_VERSION}"; exit 1;
+          }
+
+      # render discovers and builds the embedded function itself (Docker is
+      # available on ubuntu-latest), so no functions file argument is needed.
+      - name: Render every example
+        run: |
+          # R3.6: a zero-match Example_Set must fail the gate, not pass silently.
+          # nullglob makes the glob expand to nothing (not a literal) when empty;
+          # collecting into an array lets us count before iterating.
+          shopt -s nullglob
+          examples=(examples/tenantenvironments/*.yaml)
+          [ ${#examples[@]} -gt 0 ] || { echo "Example_Set is empty"; exit 1; }
+          for example in "${examples[@]}"; do
+            echo "::group::render ${example}"
+            crossplane composition render \
+              "${example}" \
+              apis/tenantenvironments/composition.yaml
+            echo "::endgroup::"
+          done
+
+  # Main-merge publish path. Builds and pushes the Configuration + embedded
+  # function packages to the -dev registry with a v0.0.0-<short-sha> tag.
+  publish-dev:
+    name: publish (dev snapshot)
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: ${{ env.FUNCTION_DIR }}/go.mod
+
+      - name: Install Crossplane CLI
+        run: |
+          # R7.3: refuse to install with an unpinned CLI.
+          [ -n "${XP_VERSION}" ] || { echo "XP_VERSION is unset/empty"; exit 1; }
+          curl -sL "https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh" | sh
+          sudo mv crossplane /usr/local/bin/
+          crossplane version --client
+          # R7.4: confirm install.sh honoured the pin and did not fall back.
+          crossplane version --client | grep -qx "Client Version: ${XP_VERSION}" || {
+            echo "CLI version mismatch: expected ${XP_VERSION}"; exit 1;
+          }
+
+      # v0.0.0-<short-sha>: a valid semver prerelease that carries the commit
+      # hash and sorts below every real release, so a main build never wins a
+      # version-constraint resolution against a tagged one.
+      - name: Compute snapshot version
+        id: version
+        run: echo "tag=v0.0.0-$(git rev-parse --short HEAD)" >> "${GITHUB_OUTPUT}"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Cache the generated dependency models / package cache, keyed on the
+      # project file so a dependency change busts it.
+      - name: Cache Crossplane dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.crossplane/cache
+          key: crossplane-cache-${{ hashFiles('crossplane-project.yaml') }}
+          restore-keys: |
+            crossplane-cache-
+
+      - name: Update dependency cache
+        run: crossplane dependency update-cache
+
+      # --repository is passed explicitly to BOTH build and push. The target
+      # registry is trigger-dependent, so we can't lean on spec.repository.
+      # It also determines how embedded functions are referenced in the
+      # Composition, so build and push MUST match.
+      - name: Build package
+        run: crossplane project build --repository="${DEV_REPO}"
+
+      - name: Push package
+        run: |
+          crossplane project push \
+            --repository="${DEV_REPO}" \
+            --tag="${{ steps.version.outputs.tag }}"

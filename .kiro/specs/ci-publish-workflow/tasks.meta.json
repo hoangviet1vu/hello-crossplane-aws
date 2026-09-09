@@ -1,0 +1,158 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Add the CLI version guard (D1) to the `check` job": [
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788929902023
+      },
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788929911822
+      },
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788930057893
+      }
+    ],
+    "2. Add the same CLI version guard (D1) to the `publish-dev` job": [
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788929902081
+      },
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788930062871
+      },
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788930110281
+      }
+    ],
+    "3. Add the empty-Example_Set guard (D4) to the \"Render every example\" step": [
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788929902114
+      },
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788930116392
+      },
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788933665850
+      }
+    ],
+    "4. Checkpoint - validate the edited workflow": [
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788929902152
+      },
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788933682368
+      },
+      {
+        "executionId": "275251a7-5d5f-4040-87b3-e41dd6bb51a5",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788933955822
+      }
+    ],
+    "5. Locally verify the D1 guard fails when triggered": [
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788929902185
+      },
+      {
+        "executionId": "275251a7-5d5f-4040-87b3-e41dd6bb51a5",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788933961347
+      },
+      {
+        "executionId": "275251a7-5d5f-4040-87b3-e41dd6bb51a5",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788934245916
+      }
+    ],
+    "6. Locally verify the D4 guard fails when triggered": [
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788929902246
+      },
+      {
+        "executionId": "275251a7-5d5f-4040-87b3-e41dd6bb51a5",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788933962322
+      },
+      {
+        "executionId": "275251a7-5d5f-4040-87b3-e41dd6bb51a5",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788934247129
+      }
+    ],
+    "7. Static review of the gate-before-publish contract": [
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788929902269
+      },
+      {
+        "executionId": "275251a7-5d5f-4040-87b3-e41dd6bb51a5",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788933963700
+      },
+      {
+        "executionId": "275251a7-5d5f-4040-87b3-e41dd6bb51a5",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788934248254
+      }
+    ],
+    "8. Document the structural divergences (D2, D3, D5) in the PR description": [
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788929902300
+      },
+      {
+        "executionId": "275251a7-5d5f-4040-87b3-e41dd6bb51a5",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788933965096
+      },
+      {
+        "executionId": "275251a7-5d5f-4040-87b3-e41dd6bb51a5",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788934249708
+      }
+    ],
+    "9. Document the main-merge publish verification (manual / CI-only)": [
+      {
+        "executionId": "eab3cf0d-4a7d-4e2d-9e81-44594cdba9e1",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788929902334
+      },
+      {
+        "executionId": "275251a7-5d5f-4040-87b3-e41dd6bb51a5",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788933966122
+      },
+      {
+        "executionId": "275251a7-5d5f-4040-87b3-e41dd6bb51a5",
+        "chatSessionId": "sess_7a7147d0-d1a2-4ca1-8090-c631622d9d48",
+        "timestamp": 1788934250691
+      }
+    ]
+  }
+}

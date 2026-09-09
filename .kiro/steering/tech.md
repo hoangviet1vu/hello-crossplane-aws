@@ -14,7 +14,7 @@ inclusion: always
 | Providers     | `crossplane-contrib/provider-aws-{s3,dynamodb,ecr}` **v2.x**          |
 | Language      | Go (latest stable), `gofmt -s` formatted                             |
 | CI/CD         | **GitHub Actions** — `.github/workflows/ci.yaml` (the only workflow)  |
-| Registry      | GitHub Packages — `ghcr.io/hoangviet1vu/hello-crossplane-aws`         |
+| Registry      | GHCR — `…/hello-crossplane-aws` (tags), `…-dev` (main snapshots)       |
 
 The project workflow is marked **[BETA]** in the CLI. That is an accepted risk
 for this PoC. Do not rewrite it to raw `crossplane xpkg build` calls unless
@@ -86,13 +86,25 @@ Do not push the function separately.
 
 ## CI and versioning
 
-`.github/workflows/ci.yaml` is the only workflow. Versioning rules are fixed:
+`.github/workflows/ci.yaml` is the only workflow. Versioning **and the target
+registry** rules are fixed:
 
-| Trigger         | Version pushed       | Example          |
-| --------------- | -------------------- | ---------------- |
-| Merge to `main` | `v0.0.0-<short-sha>` | `v0.0.0-a1b2c3d` |
-| Tag `v*`        | The tag name         | `v0.1.0`         |
-| Pull request    | Nothing pushed       | —                |
+| Trigger         | Registry pushed to                              | Version pushed       | Example          |
+| --------------- | ----------------------------------------------- | -------------------- | ---------------- |
+| Merge to `main` | `ghcr.io/hoangviet1vu/hello-crossplane-aws-dev` | `v0.0.0-<short-sha>` | `v0.0.0-a1b2c3d` |
+| Tag `v*`        | `ghcr.io/hoangviet1vu/hello-crossplane-aws`     | The tag name         | `v0.1.0`         |
+| Pull request    | — (nothing pushed)                              | —                    | —                |
+
+Two registries, split by trigger. Main builds are unreleased snapshots and go to
+the `-dev` repository so they never sit alongside real releases. Tagged builds
+are the real thing and go to `ghcr.io/hoangviet1vu/hello-crossplane-aws`. The tag
+flow is not wired up yet — the workflow only implements the main-merge path for
+now, but the registry split is fixed so adding the tag job later is mechanical.
+
+Because the registry now depends on the trigger, the workflow passes
+`--repository` explicitly to **both** `build` and `push` per job. This overrides
+`spec.repository` in `crossplane-project.yaml` (which stays pointed at the
+release repo as the default for local publishing).
 
 Package tags **must be semantic versions** — the package manager rejects a bare
 commit SHA. `v0.0.0-<short-sha>` is a valid semver prerelease that carries the
@@ -107,8 +119,10 @@ Load-bearing workflow requirements:
   built-in `GITHUB_TOKEN`. `project push` reuses Docker credentials — no PAT.
 - Run `crossplane dependency update-cache` before `project build`. Cache the
   directory with `actions/cache` keyed on `crossplane-project.yaml`.
-- Prefer setting `spec.repository` in `crossplane-project.yaml` over passing
-  `--repository` to both `build` and `push`.
+- Pass `--repository` explicitly to both `build` and `push` — the target
+  registry is trigger-dependent (`-dev` for main, the release repo for tags), so
+  the workflow can no longer lean on `spec.repository`. Keep `spec.repository`
+  set to the release repo as the local-publish default.
 - Docker must be available for the function build and `composition render`.
 - PR jobs run `gofmt`, `go vet`, `go test`, and `composition render` over every
   example. They must never push.
