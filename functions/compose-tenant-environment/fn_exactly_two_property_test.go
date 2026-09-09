@@ -126,12 +126,14 @@ func p8Keys(resources map[resource.Name]*resource.DesiredComposed) []string {
 
 // Feature: tenant-environment-s3, Property 8: Exactly two resources are composed
 //
-// For any valid TenantEnvironment spec — with table.enabled taking any value
-// and repository.enabled FALSE — RunFunction always returns a desired composed
-// resources map whose key set is EXACTLY {"bucket", "bucket-versioning"}. No
-// Table, no Repository, no other key is emitted for this S3-slice invariant.
-// The repository.enabled=true case (three resources) is covered by P-ECR-1 in
-// fn_ecr_keyset_property_test.go.
+// For any valid TenantEnvironment spec with repository.enabled FALSE,
+// RunFunction always composes the always-present S3 pair
+// {"bucket", "bucket-versioning"} and never the ECR "repository" key. Since the
+// DynamoDB slice, table.enabled=true additionally emits exactly the "table" key
+// (and never when false/absent), which this harness now accounts for; the
+// table-specific keyset invariant is owned by P-DDB-1 in
+// fn_ddb_keyset_property_test.go. The repository.enabled=true case is covered by
+// P-ECR-1 in fn_ecr_keyset_property_test.go.
 //
 // Validates: Requirements 4.1, 6.1, 6.2, 6.3
 func TestProperty8ExactlyTwoResources(t *testing.T) {
@@ -158,17 +160,36 @@ func TestProperty8ExactlyTwoResources(t *testing.T) {
 			t.Fatalf("GetDesiredComposedResources for spec %+v returned error: %v", s, err)
 		}
 
-		// The key set must be EXACTLY the two expected keys — no more, no fewer.
-		if len(resources) != len(p8ExpectedKeys) {
-			t.Fatalf("desired composed resources for spec %+v: expected exactly %d resources %v, got %d with keys %v",
-				s, len(p8ExpectedKeys), p8ExpectedKeys, len(resources), p8Keys(resources))
+		// The always-present S3 keys plus, since the DynamoDB slice, the "table"
+		// key iff table.enabled was drawn true. Copy the base set so appending
+		// never mutates the shared p8ExpectedKeys slice.
+		want := append([]resource.Name(nil), p8ExpectedKeys...)
+		if s.tableEnabled {
+			want = append(want, keyTable)
 		}
 
-		for _, want := range p8ExpectedKeys {
-			if _, ok := resources[want]; !ok {
+		// The key set must be EXACTLY the expected keys — no more, no fewer.
+		if len(resources) != len(want) {
+			t.Fatalf("desired composed resources for spec %+v: expected exactly %d resources %v, got %d with keys %v",
+				s, len(want), want, len(resources), p8Keys(resources))
+		}
+
+		for _, k := range want {
+			if _, ok := resources[k]; !ok {
 				t.Fatalf("desired composed resources for spec %+v missing expected key %q; got keys %v",
-					s, want, p8Keys(resources))
+					s, k, p8Keys(resources))
 			}
+		}
+
+		// The "table" key appears iff table.enabled was drawn true; the ECR
+		// "repository" key never appears (repository.enabled is pinned false).
+		if _, ok := resources[keyTable]; ok != s.tableEnabled {
+			t.Fatalf("desired composed resources for spec %+v: %q key present=%v, want present=%v; got keys %v",
+				s, keyTable, ok, s.tableEnabled, p8Keys(resources))
+		}
+		if _, ok := resources[keyRepository]; ok {
+			t.Fatalf("desired composed resources for spec %+v unexpectedly contains %q; got keys %v",
+				s, keyRepository, p8Keys(resources))
 		}
 	})
 }

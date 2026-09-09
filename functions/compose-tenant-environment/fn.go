@@ -25,6 +25,7 @@ import (
 	"github.com/crossplane/function-sdk-go/response"
 
 	metav1 "dev.crossplane.io/models/io/k8s/meta/v1"
+	dynamodbv1beta1 "dev.crossplane.io/models/io/upbound/m/aws/dynamodb/v1beta1"
 	ecrv1beta1 "dev.crossplane.io/models/io/upbound/m/aws/ecr/v1beta1"
 	s3v1beta1 "dev.crossplane.io/models/io/upbound/m/aws/s3/v1beta1"
 )
@@ -45,12 +46,22 @@ const (
 	keyBucket           resource.Name = "bucket"
 	keyBucketVersioning resource.Name = "bucket-versioning"
 	keyRepository       resource.Name = "repository"
+	keyTable            resource.Name = "table"
 )
 
 // defaultRegion is the XRD default for spec.region. The XRD normally populates
 // the observed XR with this value; the function tolerates an empty value
 // defensively.
 const defaultRegion = "ap-southeast-1"
+
+// DynamoDB spec defaults and the provisioned-mode sentinel. These match the XRD
+// defaults for spec.table.hashKey / spec.table.billingMode; the function
+// tolerates absent values by falling back to them.
+const (
+	defaultHashKey         = "id"
+	defaultBillingMode     = "PAY_PER_REQUEST"
+	billingModeProvisioned = "PROVISIONED"
+)
 
 // Function implements the composition function's gRPC RunFunctionService.
 type Function struct {
@@ -259,19 +270,109 @@ func (f *Function) RunFunction(_ context.Context, req *fnv1.RunFunctionRequest) 
 		}
 	}
 
+	// Resolve table.enabled. Absent means false (the schema default) → no Table
+	// composed (R2.2, R2.3). A read error other than not-found is fatal (R8.1).
+	tableEnabled := false
+	if v, verr := paved.GetBool("spec.table.enabled"); verr != nil {
+		if !fieldpath.IsNotFound(verr) {
+			response.Fatal(rsp, errors.Wrap(verr, "cannot read spec.table.enabled from observed XR"))
+			return rsp, nil
+		}
+	} else {
+		tableEnabled = v
+	}
+
+	// Compose the DynamoDB Table only when enabled (R2.1). When disabled/absent
+	// the key is never added to desired, so no Table resource exists (R2.2,
+	// R2.3). hashKey (default "id") and billingMode (default "PAY_PER_REQUEST")
+	// are read the same way as the other optional fields — a not-found value
+	// falls back to the schema default, any other read error is fatal (R4.2,
+	// R4.5, R8.1). buildTable assembles the typed model (task 3.3).
+	if tableEnabled {
+		hashKey := defaultHashKey
+		if v, verr := paved.GetString("spec.table.hashKey"); verr != nil {
+			if !fieldpath.IsNotFound(verr) {
+				response.Fatal(rsp, errors.Wrap(verr, "cannot read spec.table.hashKey from observed XR"))
+				return rsp, nil
+			}
+		} else {
+			hashKey = v
+		}
+
+		billingMode := defaultBillingMode
+		if v, verr := paved.GetString("spec.table.billingMode"); verr != nil {
+			if !fieldpath.IsNotFound(verr) {
+				response.Fatal(rsp, errors.Wrap(verr, "cannot read spec.table.billingMode from observed XR"))
+				return rsp, nil
+			}
+		} else {
+			billingMode = v
+		}
+
+		desired[keyTable] = buildTable(names, region, tags, hashKey, billingMode)
+	}
+
 	// Populate status from the CURRENT observed resource readiness (R5). status
 	// is derived fresh from the observed composed resources' Ready conditions on
 	// every reconcile — it is never latched — so a ready→not-ready transition
 	// naturally clears it (R5.3, R5.7). status.bucketName mirrors the ready
 	// bucket; status.repositoryUrl mirrors the observed Repository's provider-
-	// reported URL when the repository is enabled and Ready. status.tableName is
-	// left unset in this slice (DynamoDB out of scope).
-	if err := f.populateStatus(req, rsp, names, repoEnabled); err != nil {
+	// reported URL when the repository is enabled and Ready; status.tableName
+	// mirrors the derived table external name when the table is enabled and the
+	// observed Table is Ready.
+	if err := f.populateStatus(req, rsp, names, repoEnabled, tableEnabled); err != nil {
 		response.Fatal(rsp, errors.Wrap(err, "cannot populate status"))
 		return rsp, nil
 	}
 
 	return rsp, nil
+}
+
+// buildTable assembles the typed DynamoDB Table managed resource from plain
+// values (no Crossplane types beyond the generated model), keeping RunFunction
+// readable. The AWS name is carried by the crossplane.io/external-name
+// annotation (<tenant>-<env>-dtbl); metadata.name is deliberately left unset so
+// it is never derived from tenant/environment (R2.8, R3.3, R3.4). The resource
+// is placed in the XR's namespace <tenant>-<env> (R2.5) and uses the namespaced
+// .m. API group via the typed APIVersion/Kind constants, so the legacy
+// cluster-scoped group cannot be selected by accident (R2.4, R7.7).
+//
+// forProvider carries only region, tags, hashKey, billingMode, and a single
+// attribute {name: hashKey, type: "S"} (R2.6, R4.1, R4.3, R4.4, R5.1). Exactly
+// one attribute is declared because DynamoDB requires each declared attribute
+// to be a key attribute, so only the hash key is listed (R7.8: no secondary
+// indexes). readCapacity/writeCapacity are set to 1 ONLY for PROVISIONED and
+// left unset for PAY_PER_REQUEST (R4.6, R4.7); the generated capacities are
+// *float32, so the literal is float32(1). No other forProvider field is set —
+// no ServerSideEncryption, PointInTimeRecovery, StreamEnabled,
+// GlobalSecondaryIndex, LocalSecondaryIndex, Ttl, ForceDestroy, etc. (R7.8).
+func buildTable(names Names, region string, tags map[string]string, hashKey, billingMode string) *dynamodbv1beta1.Table {
+	fp := &dynamodbv1beta1.TableSpecForProvider{
+		Region:      ptr(region),
+		Tags:        ptr(tags),
+		HashKey:     ptr(hashKey),
+		BillingMode: ptr(billingMode),
+		Attribute: ptr([]dynamodbv1beta1.TableSpecForProviderAttributeItem{
+			{Name: ptr(hashKey), Type: ptr("S")},
+		}),
+	}
+	// Provisioned mode requires explicit capacities; on-demand must leave them
+	// unset (R4.6, R4.7). The generated fields are *float32.
+	if billingMode == billingModeProvisioned {
+		fp.ReadCapacity = ptr(float32(1))
+		fp.WriteCapacity = ptr(float32(1))
+	}
+	return &dynamodbv1beta1.Table{
+		APIVersion: ptr(dynamodbv1beta1.TableAPIVersionDynamodbAwsMUpboundIoV1Beta1),
+		Kind:       ptr(dynamodbv1beta1.TableKindTable),
+		Metadata: &metav1.ObjectMeta{
+			Namespace: ptr(names.Namespace),
+			Annotations: ptr(map[string]string{
+				externalNameAnnotation: names.TableName,
+			}),
+		},
+		Spec: &dynamodbv1beta1.TableSpec{ForProvider: fp},
+	}
 }
 
 // populateStatus sets status fields on the desired composite resource from the
@@ -290,8 +391,12 @@ func (f *Function) RunFunction(_ context.Context, req *fnv1.RunFunctionRequest) 
 //     non-whitespace; otherwise it is left unset. The disabled branch never
 //     inspects the observed Repository, so a stale observed Repository cannot
 //     leak into status once disabled (R5.1–R5.7).
-//   - status.tableName is left unset (DynamoDB out of scope).
-func (f *Function) populateStatus(req *fnv1.RunFunctionRequest, rsp *fnv1.RunFunctionResponse, names Names, repoEnabled bool) error {
+//   - status.tableName is set to the derived table external name
+//     (byte-for-byte, like status.bucketName — NOT read from atProvider) when
+//     the table is enabled AND the observed Table reports Ready; otherwise it is
+//     left unset. The disabled branch never inspects the observed Table, so a
+//     stale observed Table cannot leak into status once disabled (R6.1–R6.6).
+func (f *Function) populateStatus(req *fnv1.RunFunctionRequest, rsp *fnv1.RunFunctionResponse, names Names, repoEnabled, tableEnabled bool) error {
 	observed, err := request.GetObservedComposedResources(req)
 	if err != nil {
 		return errors.Wrap(err, "cannot get observed composed resources")
@@ -333,6 +438,25 @@ func (f *Function) populateStatus(req *fnv1.RunFunctionRequest, rsp *fnv1.RunFun
 				if err := paved.SetString("status.repositoryUrl", url); err != nil {
 					return errors.Wrap(err, "cannot set status.repositoryUrl on desired composite resource")
 				}
+			}
+		}
+	}
+
+	// --- status.tableName (this slice) ---
+	// Set ONLY when the table is enabled AND the observed Table is Ready. Unlike
+	// status.repositoryUrl, the value is derived from naming (names.TableName),
+	// not read from the observed resource's atProvider — mirroring the S3
+	// status.bucketName pattern. Otherwise the field is left absent. Derived
+	// fresh every reconcile from the current observed Ready condition — never
+	// latched — so enabled→disabled or ready→not-ready naturally clears it
+	// (R6.1, R6.2, R6.3, R6.4, R6.5, R6.6). The disabled branch never inspects
+	// the observed Table, so a stale observed Table cannot leak into status once
+	// disabled (R6.5).
+	if tableEnabled {
+		if table, ok := observed[keyTable]; ok &&
+			table.Resource.GetCondition(xpv2.TypeReady).Status == corev1.ConditionTrue {
+			if err := paved.SetString("status.tableName", names.TableName); err != nil {
+				return errors.Wrap(err, "cannot set status.tableName on desired composite resource")
 			}
 		}
 	}

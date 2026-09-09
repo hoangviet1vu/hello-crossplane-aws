@@ -18,6 +18,7 @@ type Names struct {
 	Namespace      string // "<tenant>-<env>"
 	BucketName     string // "<tenant>-<env>-bucket"  (the AWS external name)
 	RepositoryName string // "<tenant>-<env>-ecr"     (the ECR external name)
+	TableName      string // "<tenant>-<env>-dtbl"    (the DynamoDB external name)
 }
 
 // BuildNames validates tenant and environment and returns the derived names.
@@ -38,6 +39,7 @@ func BuildNames(tenant, environment string) (Names, error) {
 		Namespace:      namespace,
 		BucketName:     namespace + "-bucket",
 		RepositoryName: namespace + "-ecr",
+		TableName:      namespace + "-dtbl",
 	}, nil
 }
 

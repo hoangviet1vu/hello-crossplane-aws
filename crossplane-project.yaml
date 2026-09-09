@@ -10,25 +10,22 @@ spec:
       kind: Provider
       package: xpkg.crossplane.io/crossplane-contrib/provider-aws-s3
       version: '>=v0.0.0'
-  # provider-aws-ecr reconciles the namespaced ECR Repository composed by the
-  # TenantEnvironment function when spec.repository.enabled is true. Its typed Go
-  # models are already generated under dev.crossplane.io/models
-  # (schemas/go/io/upbound/m/aws/ecr/v1beta1). Declaring it here lets the CLI
-  # resolve the provider for `composition render` / `project build`.
   - type: xpkg
     xpkg:
       apiVersion: pkg.crossplane.io/v1
       kind: Provider
       package: xpkg.crossplane.io/crossplane-contrib/provider-aws-ecr
       version: '>=v0.0.0'
-  # function-auto-ready is the second pipeline step in the TenantEnvironment
-  # Composition. It must be a declared dependency so the CLI resolves, loads,
-  # and registers it for `composition render` / `project run`; otherwise the
-  # render engine reports it as an unknown function.
   - type: xpkg
     xpkg:
       apiVersion: pkg.crossplane.io/v1
       kind: Function
       package: xpkg.crossplane.io/crossplane-contrib/function-auto-ready
+      version: '>=v0.0.0'
+  - type: xpkg
+    xpkg:
+      apiVersion: pkg.crossplane.io/v1
+      kind: Provider
+      package: xpkg.crossplane.io/crossplane-contrib/provider-aws-dynamodb
       version: '>=v0.0.0'
   repository: ghcr.io/hoangviet1vu/hello-crossplane-aws

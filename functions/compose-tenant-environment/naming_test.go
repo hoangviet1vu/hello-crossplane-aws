@@ -35,6 +35,7 @@ func TestBuildNames(t *testing.T) {
 				Namespace:      "abc-dev",
 				BucketName:     "abc-dev-bucket",
 				RepositoryName: "abc-dev-ecr",
+				TableName:      "abc-dev-dtbl",
 			},
 		},
 		"longest tenant, prod": {
@@ -44,6 +45,7 @@ func TestBuildNames(t *testing.T) {
 				Namespace:      "a12345678901234567890b-prod",
 				BucketName:     "a12345678901234567890b-prod-bucket",
 				RepositoryName: "a12345678901234567890b-prod-ecr",
+				TableName:      "a12345678901234567890b-prod-dtbl",
 			},
 		},
 		"environment dev": {
@@ -53,6 +55,7 @@ func TestBuildNames(t *testing.T) {
 				Namespace:      "acme-dev",
 				BucketName:     "acme-dev-bucket",
 				RepositoryName: "acme-dev-ecr",
+				TableName:      "acme-dev-dtbl",
 			},
 		},
 		"environment staging": {
@@ -62,6 +65,7 @@ func TestBuildNames(t *testing.T) {
 				Namespace:      "acme-staging",
 				BucketName:     "acme-staging-bucket",
 				RepositoryName: "acme-staging-ecr",
+				TableName:      "acme-staging-dtbl",
 			},
 		},
 		"environment prod": {
@@ -71,6 +75,7 @@ func TestBuildNames(t *testing.T) {
 				Namespace:      "acme-prod",
 				BucketName:     "acme-prod-bucket",
 				RepositoryName: "acme-prod-ecr",
+				TableName:      "acme-prod-dtbl",
 			},
 		},
 		"empty tenant": {
