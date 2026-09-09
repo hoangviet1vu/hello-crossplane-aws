@@ -38,6 +38,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # The standard GitHub-hosted runner has 7 GB RAM and no configured
+      # swap. Building the embedded function's dependency graph (k8s.io/api,
+      # controller-runtime, crossplane-runtime, grpc, ...) alongside Docker
+      # Engine and other background processes can exhaust that with no
+      # headroom, so `go build` gets OOM-killed ("go build: signal: killed")
+      # rather than cleanly failing. Give the kernel somewhere to page out to
+      # instead.
+      - name: Increase swap space
+        run: |
+          sudo swapoff -a
+          sudo fallocate -l 6G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
