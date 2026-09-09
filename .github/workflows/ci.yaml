@@ -13,6 +13,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
 
 # GHCR login uses the built-in token; project push reuses Docker credentials.
 permissions:
@@ -183,4 +185,98 @@ jobs:
         run: |
           crossplane project push \
             --repository="${DEV_REPO}" \
+            --tag="${{ steps.version.outputs.tag }}"
+
+  # Tag-release publish path. Builds and pushes the Configuration + embedded
+  # function packages to the release registry with the pushed Git tag as the
+  # version. Gated on v* tag pushes only, so it never runs on PRs, main pushes,
+  # non-v tags, or other events — mutually exclusive with publish-dev.
+  publish-release:
+    name: publish (release)
+    needs: check
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: ${{ env.FUNCTION_DIR }}/go.mod
+
+      - name: Install Crossplane CLI
+        run: |
+          # R7.3: refuse to install with an unpinned CLI.
+          [ -n "${XP_VERSION}" ] || { echo "XP_VERSION is unset/empty"; exit 1; }
+          curl -sL "https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh" | sh
+          sudo mv crossplane /usr/local/bin/
+          crossplane version --client
+          # R7.4: confirm install.sh honoured the pin and did not fall back.
+          crossplane version --client | grep -qx "Client Version: ${XP_VERSION}" || {
+            echo "CLI version mismatch: expected ${XP_VERSION}"; exit 1;
+          }
+      # R5: the published Package version is the pushed Git tag name, used
+      # verbatim (no transform/truncate/prefix-strip). Validate it BEFORE
+      # login/build/push so an invalid tag leaves the Release_Registry
+      # unchanged. The tag carries a `v` prefix (matched by the trigger) and
+      # must be a full semantic version: MAJOR.MINOR.PATCH with optional
+      # `-prerelease` and `+build` suffixes. This rejects a bare SHA, `latest`,
+      # and incomplete versions like `v1`/`v1.2` (R5.2, R5.3, R5.4).
+      - name: Validate release version
+        id: version
+        run: |
+          ref_name="${{ github.ref_name }}"
+          # R5.4: empty/unavailable ref name is a hard failure before push.
+          [ -n "${ref_name}" ] || { echo "release version is missing"; exit 1; }
+          # R5.2/R5.3: semver with required v prefix. Anchored ERE.
+          #   v MAJOR.MINOR.PATCH  [ -prerelease ]  [ +build ]
+          semver='^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'
+          if ! printf '%s' "${ref_name}" | grep -Eq "${semver}"; then
+            echo "invalid semantic version: ${ref_name}"; exit 1
+          fi
+          # R5.1: export the validated value unchanged for the push step.
+          echo "tag=${ref_name}" >> "${GITHUB_OUTPUT}"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Cache the generated dependency models / package cache, keyed on the
+      # project file so a dependency change busts it.
+      - name: Cache Crossplane dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.crossplane/cache
+          key: crossplane-cache-${{ hashFiles('crossplane-project.yaml') }}
+          restore-keys: |
+            crossplane-cache-
+
+      - name: Update dependency cache
+        run: crossplane dependency update-cache
+
+      # --repository is passed explicitly to BOTH build and push, pointing at
+      # the release registry (unlike publish-dev, which targets DEV_REPO). The
+      # target registry is trigger-dependent, so we can't lean on
+      # spec.repository. It also determines how embedded functions are
+      # referenced in the Composition, so build and push MUST match. A build
+      # failure fails the run before push, leaving the Release_Registry
+      # unchanged.
+      - name: Build package
+        run: crossplane project build --repository="${RELEASE_REPO}"
+
+      # A single `project push` ships the Configuration and embedded function
+      # package(s) together. --repository reuses the same RELEASE_REPO
+      # reference as build, so the two are byte-for-byte identical (R6.2,
+      # R6.3), and targets only the release registry, never DEV_REPO (R4.1,
+      # R4.3, R11.4). --tag is the validated Git tag from the version step.
+      # Runs only after a successful build; a push failure fails the run and
+      # surfaces the error (R3.1, R3.4).
+      - name: Push package
+        run: |
+          crossplane project push \
+            --repository="${RELEASE_REPO}" \
             --tag="${{ steps.version.outputs.tag }}"

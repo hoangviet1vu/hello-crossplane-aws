@@ -1,0 +1,284 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Add the `v*` tag filter to the push trigger": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952061154
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952076093
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952121174
+      }
+    ],
+    "2.1 Declare the `publish-release` job with its gate and runner": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952061643
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952127630
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952178946
+      }
+    ],
+    "3.1 Add Checkout and Go setup steps": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952062077
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952186243
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952226809
+      }
+    ],
+    "3.2 Add the Crossplane CLI install-and-verify step": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952062444
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952233725
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952322962
+      }
+    ],
+    "4.1 Validate `github.ref_name` before login/build/push": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952062887
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952329403
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952389085
+      }
+    ],
+    "5.1 Log in to GHCR with the built-in token before any push": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952063345
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952394488
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952450584
+      }
+    ],
+    "6.1 Add cache restore and `update-cache` steps": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952063721
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952455789
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952505497
+      }
+    ],
+    "7.1 Add the build step with explicit `--repository`": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952064045
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952510921
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952598807
+      }
+    ],
+    "7.2 Add the push step with matching `--repository` and the tag": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952064528
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952604020
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952658040
+      }
+    ],
+    "8. Checkpoint - static validation": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952064957
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952680600
+      }
+    ],
+    "9.1 Review the `on:` block and `publish-release` `if` guard": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952065324
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952687893
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952773818
+      }
+    ],
+    "10.1 Exercise the validate step against representative inputs": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952065734
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952694622
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952780009
+      }
+    ],
+    "11.1 Dry local build and release rehearsal": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952066062
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952837936
+      },
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952922195
+      }
+    ],
+    "2. Add the gated `publish-release` job skeleton": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952179283
+      }
+    ],
+    "3. Add the release-job setup steps (checkout, Go, CLI pin)": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952323475
+      }
+    ],
+    "4. Add the semver validation guard step": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952389428
+      }
+    ],
+    "5. Add the GHCR login step": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952451009
+      }
+    ],
+    "6. Add the dependency-cache steps": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952505965
+      }
+    ],
+    "7. Add the build and push steps targeting the release registry": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952658402
+      }
+    ],
+    "9. Verify trigger gating against the truth table": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952774177
+      }
+    ],
+    "10. Verify semver validation behaviour": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952780305
+      }
+    ],
+    "11. Verify the end-to-end release path": [
+      {
+        "executionId": "5b38af2d-0eaf-4737-97f3-41ea00a042fe",
+        "chatSessionId": "sess_e6ef3531-1498-41ec-90c1-fd88b9ff73ab",
+        "timestamp": 1788952922685
+      }
+    ]
+  }
+}
