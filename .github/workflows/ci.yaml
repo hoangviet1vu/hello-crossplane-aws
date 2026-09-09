@@ -38,22 +38,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # The standard GitHub-hosted runner has 7 GB RAM and no configured
-      # swap. Building the embedded function's dependency graph (k8s.io/api,
-      # controller-runtime, crossplane-runtime, grpc, ...) alongside Docker
-      # Engine and other background processes can exhaust that with no
-      # headroom, so `go build` gets OOM-killed ("go build: signal: killed")
-      # rather than cleanly failing. Give the kernel somewhere to page out to
-      # instead.
-      - name: Increase swap space
-        run: |
-          sudo swapoff -a
-          sudo fallocate -l 6G /swapfile
-          sudo chmod 600 /swapfile
-          sudo mkswap /swapfile
-          sudo swapon /swapfile
-          free -h
-
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -108,18 +92,15 @@ jobs:
       # render discovers and builds the embedded function itself (Docker is
       # available on ubuntu-latest), so no functions file argument is needed.
       #
-      # `crossplane composition render` defaults --max-concurrency=8, meaning
-      # up to 8 embedded-function image builds run in flight at once, each
-      # holding a Go build/link in memory. On the standard 2-core/7GB GitHub
-      # runner that blows past available memory and `go build` gets
-      # OOM-killed ("go build: signal: killed"). --max-concurrency=1 serialises
-      # the builds; GOFLAGS/GOMEMLIMIT/GOGC put a further ceiling on the Go
-      # heap used by each one.
+      # `crossplane composition render` defaults --timeout=1m for the whole
+      # render, including the cold `go build` of the embedded function. That
+      # build's cache key differs from go vet/go test's (different
+      # ldflags/CGO settings), so it doesn't reuse their build cache and can
+      # legitimately take longer than a minute on a shared CI CPU — the CLI
+      # then kills the build subprocess on timeout, which surfaces as
+      # "go build: signal: killed" and looks like an OOM but isn't one.
+      # Give it real headroom instead.
       - name: Render every example
-        env:
-          GOFLAGS: -p=1
-          GOMEMLIMIT: 5GiB
-          GOGC: "50"
         run: |
           # R3.6: a zero-match Example_Set must fail the gate, not pass silently.
           # nullglob makes the glob expand to nothing (not a literal) when empty;
@@ -130,7 +111,7 @@ jobs:
           for example in "${examples[@]}"; do
             echo "::group::render ${example}"
             crossplane composition render \
-              --max-concurrency=1 \
+              --timeout=10m \
               "${example}" \
               apis/tenantenvironments/composition.yaml
             echo "::endgroup::"
