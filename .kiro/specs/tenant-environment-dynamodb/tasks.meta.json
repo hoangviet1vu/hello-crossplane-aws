@@ -1,0 +1,438 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Declare the DynamoDB provider dependency and generate its models": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924832738
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924845017
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924964889
+      }
+    ],
+    "2.1 Add `TableName` to `naming.go`": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924832823
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924851788
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924965623
+      }
+    ],
+    "2.2 Extend `naming_test.go` table cases for `TableName`": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924832899
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924971434
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925089311
+      }
+    ],
+    "2.3 Write property test P-DDB-10 for `TableName`": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924832942
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924972437
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925087578
+      }
+    ],
+    "3.1 Add the `keyTable` constant, supporting constants, and the DynamoDB model import": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924832986
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924974080
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925089939
+      }
+    ],
+    "3.2 Read the table spec fields and conditionally build the Table": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833011
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925095584
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925167645
+      }
+    ],
+    "3.3 Implement the `buildTable` helper": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833055
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925172835
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925344143
+      }
+    ],
+    "3.4 Write property test P-DDB-1 for the exact keyset": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833099
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925351042
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925617981
+      }
+    ],
+    "3.5 Write property test P-DDB-2 for the Table group and Kind": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833145
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925352027
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925619140
+      }
+    ],
+    "3.6 Write property test P-DDB-3 for external-name, region, and no metadata.name": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833178
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925353721
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925616612
+      }
+    ],
+    "3.7 Write property test P-DDB-4 for the Table namespace": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833218
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925354788
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925621408
+      }
+    ],
+    "3.8 Write property test P-DDB-5 for the key schema": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833242
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925356011
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925620556
+      }
+    ],
+    "3.9 Write property test P-DDB-6 for billing mode and capacity": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833289
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925630191
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925819844
+      }
+    ],
+    "3.10 Write property test P-DDB-8 for the Table tag set": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833328
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925631211
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925818923
+      }
+    ],
+    "3.11 Write property test P-DDB-9 for invalid-spec fatal behavior": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833387
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925633028
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925821058
+      }
+    ],
+    "3.12 Write property test P-DDB-11 for S3/ECR invariance": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833419
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925634004
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925817459
+      }
+    ],
+    "4. Checkpoint - naming + emission": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833457
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788926651161
+      }
+    ],
+    "5.1 Extend `populateStatus` with the `tableEnabled` path": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833504
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925831423
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925940985
+      }
+    ],
+    "5.2 Write property test P-DDB-7 for `status.tableName`": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833544
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925946883
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788926170707
+      }
+    ],
+    "6.1 Verify the example XRs match the slice's enabled/disabled split": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833580
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925635079
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925822816
+      }
+    ],
+    "6.2 Extend `fn_test.go` example expectations": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833612
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925948088
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788926169899
+      }
+    ],
+    "7.1 Run Go format, vet, and tests": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833658
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788926177096
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788926244658
+      }
+    ],
+    "7.2 Run composition render over both examples": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833694
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788926249947
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788926593243
+      }
+    ],
+    "8. Final checkpoint - definition of done": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788924833724
+      },
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788926656411
+      }
+    ],
+    "2. Extend the naming module with the DynamoDB external name": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925089353
+      }
+    ],
+    "3. Conditionally emit the DynamoDB Table in `fn.go`": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788925821115
+      }
+    ],
+    "6. Verify and extend example wiring": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788926169968
+      }
+    ],
+    "5. Mirror the derived table name into status": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788926170770
+      }
+    ],
+    "7. Verification gate": [
+      {
+        "executionId": "02452a75-5cc3-4001-9962-b804d5d0ee70",
+        "chatSessionId": "sess_4a532dee-6a97-42de-9211-4409b54f8218",
+        "timestamp": 1788926593290
+      }
+    ]
+  }
+}

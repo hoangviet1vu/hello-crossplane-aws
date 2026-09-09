@@ -24,6 +24,8 @@ type fntSpec struct {
 	region       string // "" → omit spec.region (rely on XRD/function default)
 	versioning   *bool  // nil → omit spec.bucket.versioning
 	tableEnabled bool
+	tableHashKey string // "" → omit spec.table.hashKey (rely on function default "id")
+	billingMode  string // "" → omit spec.table.billingMode (rely on default PAY_PER_REQUEST)
 	repoEnabled  bool
 	// omitTenant, when true, drops spec.tenant from the XR entirely to model a
 	// malformed input. omitEnvironment does the same for spec.environment.
@@ -66,6 +68,35 @@ type fntRepositoryWant struct {
 	Tags         map[string]string
 }
 
+// fntAttributeWant is one entry in a Table's spec.forProvider.attribute list,
+// projected to the name/type pair the key-schema assertions care about.
+type fntAttributeWant struct {
+	Name string
+	Type string
+}
+
+// fntTableWant is the observable slice of a desired Table (DynamoDB) resource
+// asserted by a table case: apiVersion/Kind, namespace, external name, region,
+// the three standard tags, the hash key, the billing mode, the single attribute
+// definition, and the provisioned-mode read/write capacities. HasName records
+// whether metadata.name is present, so a case can assert it is never set to a
+// tenant/env-derived value. ReadCapacity/WriteCapacity are pointers so a case
+// distinguishes "unset" (PAY_PER_REQUEST) from an explicit 1 (PROVISIONED).
+type fntTableWant struct {
+	APIVersion    string
+	Kind          string
+	Namespace     string
+	ExternalName  string
+	Region        string
+	Tags          map[string]string
+	HashKey       string
+	BillingMode   string
+	Attributes    []fntAttributeWant
+	ReadCapacity  *float64
+	WriteCapacity *float64
+	HasName       bool
+}
+
 // fntBuildRequest synthesises a RunFunctionRequest whose observed composite is a
 // TenantEnvironment carrying the given spec. Absent fields are genuinely omitted
 // so the function's default/guard paths are exercised, mirroring how the render
@@ -90,7 +121,14 @@ func fntBuildRequest(t *testing.T, s fntSpec) *fnv1.RunFunctionRequest {
 	if s.versioning != nil {
 		spec["bucket"] = map[string]any{"versioning": *s.versioning}
 	}
-	spec["table"] = map[string]any{"enabled": s.tableEnabled}
+	table := map[string]any{"enabled": s.tableEnabled}
+	if s.tableHashKey != "" {
+		table["hashKey"] = s.tableHashKey
+	}
+	if s.billingMode != "" {
+		table["billingMode"] = s.billingMode
+	}
+	spec["table"] = table
 	spec["repository"] = map[string]any{"enabled": s.repoEnabled}
 
 	// The XR namespace/name are <tenant>-<env> per the design invariant; for
@@ -218,12 +256,102 @@ func fntProjectRepository(content map[string]any) fntRepositoryWant {
 	}
 }
 
+// fntGetNumber reads a dotted path expected to hold a JSON number, returning
+// (0, false) when any segment is absent or the value is not numeric. Numbers in
+// unstructured content round-trip through JSON as float64.
+func fntGetNumber(content map[string]any, path ...string) (float64, bool) {
+	cur := any(content)
+	for _, seg := range path {
+		m, ok := cur.(map[string]any)
+		if !ok {
+			return 0, false
+		}
+		cur, ok = m[seg]
+		if !ok {
+			return 0, false
+		}
+	}
+	f, ok := cur.(float64)
+	return f, ok
+}
+
+// fntGetAttributes reads spec.forProvider.attribute as a slice of {name, type}
+// pairs, returning nil when absent.
+func fntGetAttributes(content map[string]any) []fntAttributeWant {
+	cur := any(content)
+	for _, seg := range []string{"spec", "forProvider", "attribute"} {
+		m, ok := cur.(map[string]any)
+		if !ok {
+			return nil
+		}
+		cur, ok = m[seg]
+		if !ok {
+			return nil
+		}
+	}
+	list, ok := cur.([]any)
+	if !ok {
+		return nil
+	}
+	out := make([]fntAttributeWant, 0, len(list))
+	for _, item := range list {
+		m, ok := item.(map[string]any)
+		if !ok {
+			continue
+		}
+		name, _ := m["name"].(string)
+		typ, _ := m["type"].(string)
+		out = append(out, fntAttributeWant{Name: name, Type: typ})
+	}
+	return out
+}
+
+// fntProjectTable extracts the observable Table slice from a desired composed
+// resource's unstructured content. Read/write capacities are projected as
+// pointers so an unset value (PAY_PER_REQUEST) is distinguishable from an
+// explicit 1 (PROVISIONED).
+func fntProjectTable(content map[string]any) fntTableWant {
+	apiVersion, _ := fntGetString(content, "apiVersion")
+	kind, _ := fntGetString(content, "kind")
+	ns, _ := fntGetString(content, "metadata", "namespace")
+	extName, _ := fntGetString(content, "metadata", "annotations", externalNameAnnotation)
+	region, _ := fntGetString(content, "spec", "forProvider", "region")
+	tags := fntGetStringMap(content, "spec", "forProvider", "tags")
+	hashKey, _ := fntGetString(content, "spec", "forProvider", "hashKey")
+	billingMode, _ := fntGetString(content, "spec", "forProvider", "billingMode")
+	_, hasName := fntGetString(content, "metadata", "name")
+
+	var readCap, writeCap *float64
+	if v, ok := fntGetNumber(content, "spec", "forProvider", "readCapacity"); ok {
+		readCap = &v
+	}
+	if v, ok := fntGetNumber(content, "spec", "forProvider", "writeCapacity"); ok {
+		writeCap = &v
+	}
+
+	return fntTableWant{
+		APIVersion:    apiVersion,
+		Kind:          kind,
+		Namespace:     ns,
+		ExternalName:  extName,
+		Region:        region,
+		Tags:          tags,
+		HashKey:       hashKey,
+		BillingMode:   billingMode,
+		Attributes:    fntGetAttributes(content),
+		ReadCapacity:  readCap,
+		WriteCapacity: writeCap,
+		HasName:       hasName,
+	}
+}
+
 // TestRunFunction is the table-driven wiring/edge-case suite for RunFunction. It
 // covers the two example XRs (acme-dev, globex-prod), a malformed XR that must
-// yield a fatal result and zero desired resources, and — as far as the public
-// RunFunction allows — the R4.8 versioning guard.
+// yield a fatal result and zero desired resources, a crafted PROVISIONED table
+// case, and — as far as the public RunFunction allows — the R4.8 versioning
+// guard.
 //
-// _Requirements: 7.1, 7.2, 4.8_
+// _Requirements: 2.1, 2.5, 2.6, 2.8, 4.1, 4.3, 4.4, 4.5, 4.6, 4.7, 5.1, 7.1, 7.2, 7.4, 7.6, 4.8_
 func TestRunFunction(t *testing.T) {
 	bTrue := true
 
@@ -233,6 +361,7 @@ func TestRunFunction(t *testing.T) {
 		bucket        *fntBucketWant     // nil → do not assert the bucket projection
 		versioning    *fntVersioningWant // nil → do not assert the versioning projection
 		repository    *fntRepositoryWant // nil → assert the "repository" key is ABSENT
+		table         *fntTableWant      // nil → assert the "table" key is ABSENT
 	}
 
 	cases := map[string]struct {
@@ -275,9 +404,10 @@ func TestRunFunction(t *testing.T) {
 
 		// examples/tenantenvironments/globex-prod.yaml: tenant=globex,
 		// environment=prod, region ap-southeast-1, bucket.versioning explicitly
-		// true → Enabled, table & repo enabled. repository.enabled: true adds a
-		// third desired resource, the ECR Repository, so the keyset is
-		// {bucket, bucket-versioning, repository}.
+		// true → Enabled, table & repo enabled (hashKey id, billingMode
+		// PAY_PER_REQUEST). repository.enabled: true and table.enabled: true each
+		// add a resource, so the keyset is
+		// {bucket, bucket-versioning, repository, table} (R7.6).
 		"globex-prod": {
 			spec: fntSpec{
 				tenant:       "globex",
@@ -288,7 +418,7 @@ func TestRunFunction(t *testing.T) {
 				repoEnabled:  true,
 			},
 			want: want{
-				resourceCount: 3,
+				resourceCount: 4,
 				bucket: &fntBucketWant{
 					APIVersion:   "s3.aws.m.upbound.io/v1beta1",
 					Kind:         "Bucket",
@@ -319,6 +449,64 @@ func TestRunFunction(t *testing.T) {
 						"environment": "prod",
 						"managed-by":  "crossplane",
 					},
+				},
+				// Table enabled with the schema defaults: hashKey id, one
+				// attribute {id, S}, billingMode PAY_PER_REQUEST so no
+				// read/write capacities are set (R2.1, R2.5, R2.6, R2.8, R4.1,
+				// R4.3, R4.4, R4.6, R5.1). metadata.name must never be set.
+				table: &fntTableWant{
+					APIVersion:   "dynamodb.aws.m.upbound.io/v1beta1",
+					Kind:         "Table",
+					Namespace:    "globex-prod",
+					ExternalName: "globex-prod-dtbl",
+					Region:       "ap-southeast-1",
+					Tags: map[string]string{
+						"tenant":      "globex",
+						"environment": "prod",
+						"managed-by":  "crossplane",
+					},
+					HashKey:       "id",
+					BillingMode:   "PAY_PER_REQUEST",
+					Attributes:    []fntAttributeWant{{Name: "id", Type: "S"}},
+					ReadCapacity:  nil,
+					WriteCapacity: nil,
+					HasName:       false,
+				},
+			},
+		},
+
+		// Crafted PROVISIONED table case (not from an example file): a table
+		// enabled with billingMode PROVISIONED must carry readCapacity and
+		// writeCapacity each equal to 1 (R4.7). Repository is disabled, so the
+		// keyset is {bucket, bucket-versioning, table}.
+		"provisioned table sets read and write capacity to one": {
+			spec: fntSpec{
+				tenant:       "acme",
+				environment:  "staging",
+				tableEnabled: true,
+				tableHashKey: "pk",
+				billingMode:  "PROVISIONED",
+				repoEnabled:  false,
+			},
+			want: want{
+				resourceCount: 3,
+				table: &fntTableWant{
+					APIVersion:   "dynamodb.aws.m.upbound.io/v1beta1",
+					Kind:         "Table",
+					Namespace:    "acme-staging",
+					ExternalName: "acme-staging-dtbl",
+					Region:       defaultRegion,
+					Tags: map[string]string{
+						"tenant":      "acme",
+						"environment": "staging",
+						"managed-by":  "crossplane",
+					},
+					HashKey:       "pk",
+					BillingMode:   "PROVISIONED",
+					Attributes:    []fntAttributeWant{{Name: "pk", Type: "S"}},
+					ReadCapacity:  ptr(float64(1)),
+					WriteCapacity: ptr(float64(1)),
+					HasName:       false,
 				},
 			},
 		},
@@ -436,8 +624,52 @@ func TestRunFunction(t *testing.T) {
 			} else if _, ok := desired[keyRepository]; ok {
 				t.Errorf("desired resources contain key %q; want it absent (repository disabled)", keyRepository)
 			}
+
+			// Table (DynamoDB) is optional and gated by spec.table.enabled. A
+			// non-nil want.table asserts the projection; a nil one asserts the
+			// "table" key is absent entirely (the disabled path must not emit
+			// the resource at all).
+			if tc.want.table != nil {
+				tbl, ok := desired[keyTable]
+				if !ok {
+					t.Fatalf("desired resources missing key %q", keyTable)
+				}
+				got := fntProjectTable(tbl.Resource.UnstructuredContent())
+				if diff := cmp.Diff(*tc.want.table, got); diff != "" {
+					t.Errorf("table projection mismatch (-want +got):\n%s", diff)
+				}
+				// metadata.name must never be set to the external name or any
+				// tenant/env-derived value (R2.8, R3.4).
+				if got.HasName {
+					t.Errorf("table metadata.name is set; want it absent so the AWS name comes only from the external-name annotation")
+				}
+			} else if _, ok := desired[keyTable]; ok {
+				t.Errorf("desired resources contain key %q; want it absent (table disabled)", keyTable)
+			}
+
+			// status.tableName must be absent whenever no observed Table reports
+			// Ready — which is every case here, since none synthesise observed
+			// composed resources (R6.2, R6.5). Assert absence on the desired
+			// composite the function wrote back.
+			if !tc.want.fatal {
+				if _, present := fntStatusTableName(rsp); present {
+					t.Errorf("status.tableName is set; want it absent (no observed Table reports Ready)")
+				}
+			}
 		})
 	}
+}
+
+// fntStatusTableName reads status.tableName off the desired composite resource
+// carried in the response, returning ("", false) when the composite or the
+// field is absent. The function writes status onto the desired composite via
+// response.SetDesiredCompositeResource, so this reads rsp.Desired.Composite.
+func fntStatusTableName(rsp *fnv1.RunFunctionResponse) (string, bool) {
+	comp := rsp.GetDesired().GetComposite()
+	if comp == nil {
+		return "", false
+	}
+	return fntGetString(comp.GetResource().AsMap(), "status", "tableName")
 }
 
 // fntHasFatal reports whether the response carries a SEVERITY_FATAL result. The

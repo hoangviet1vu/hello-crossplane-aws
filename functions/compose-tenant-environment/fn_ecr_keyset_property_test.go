@@ -117,9 +117,11 @@ func pEcr1BuildRequest(s pEcr1Spec) (*fnv1.RunFunctionRequest, error) {
 //
 // For any valid TenantEnvironment spec, RunFunction returns a desired composed
 // resources map whose key set is EXACTLY {"bucket", "bucket-versioning"} when
-// spec.repository.enabled is false or absent, and EXACTLY
-// {"bucket", "bucket-versioning", "repository"} when it is true. table.enabled
-// varies freely and never introduces a "Table" (or any other) key.
+// spec.repository.enabled is false or absent, plus "repository" when it is true.
+// table.enabled varies freely: since the DynamoDB slice it adds exactly the
+// "table" key when true and never when false/absent, so this harness asserts the
+// ECR keyset holds across every table.enabled value (the table-specific keyset
+// invariant is owned by P-DDB-1 in fn_ddb_keyset_property_test.go).
 //
 // Validates: Requirements 2.1, 2.2, 2.3, 6.1, 6.2, 6.3, 6.4, 6.5
 func TestPropertyEcr1ExactKeyset(t *testing.T) {
@@ -146,9 +148,19 @@ func TestPropertyEcr1ExactKeyset(t *testing.T) {
 			t.Fatalf("GetDesiredComposedResources for spec %+v returned error: %v", s, err)
 		}
 
-		want := pEcr1KeysDisabled
+		// Copy the base key set so appending the table key never mutates the
+		// shared package-level slices.
+		var want []resource.Name
 		if s.repo == repoEnabledTrue {
-			want = pEcr1KeysEnabled
+			want = append(want, pEcr1KeysEnabled...)
+		} else {
+			want = append(want, pEcr1KeysDisabled...)
+		}
+		// Since the DynamoDB slice, table.enabled=true adds the "table" key.
+		// This harness draws tableEnabled freely, so account for that key when
+		// it is set (mirrors the P-DDB-1 keyset logic).
+		if s.tableEnabled {
+			want = append(want, keyTable)
 		}
 
 		// The key set must be EXACTLY the expected keys — no more, no fewer.
@@ -164,10 +176,10 @@ func TestPropertyEcr1ExactKeyset(t *testing.T) {
 			}
 		}
 
-		// No "Table" key (nor any unexpected identifier) ever appears.
-		if _, ok := resources[resource.Name("table")]; ok {
-			t.Fatalf("desired composed resources for spec %+v unexpectedly contains a %q key; got keys %v",
-				s, "table", pEcr1Keys(resources))
+		// The "table" key appears iff table.enabled was drawn true.
+		if _, ok := resources[keyTable]; ok != s.tableEnabled {
+			t.Fatalf("desired composed resources for spec %+v: %q key present=%v, want present=%v; got keys %v",
+				s, keyTable, ok, s.tableEnabled, pEcr1Keys(resources))
 		}
 	})
 }
