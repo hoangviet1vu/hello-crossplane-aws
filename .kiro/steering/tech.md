@@ -124,8 +124,11 @@ Load-bearing workflow requirements:
   the workflow can no longer lean on `spec.repository`. Keep `spec.repository`
   set to the release repo as the local-publish default.
 - Docker must be available for the function build and `composition render`.
-- PR jobs run `gofmt`, `go vet`, `go test`, and `composition render` over every
-  example. They must never push.
+- PR jobs run `crossplane dependency update-cache` (needed before `go vet`/
+  `go test`, which resolve the generated `dev.crossplane.io/models` module
+  under `schemas/go` via a `go.mod` replace directive), then `gofmt`, `go vet`,
+  `go test`, and `composition render` over every example. They must never
+  push.
 
 ## Things that will bite you
 

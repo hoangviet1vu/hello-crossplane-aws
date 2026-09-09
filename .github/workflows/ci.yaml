@@ -43,6 +43,34 @@ jobs:
         with:
           go-version-file: ${{ env.FUNCTION_DIR }}/go.mod
 
+      - name: Install Crossplane CLI
+        run: |
+          # R7.3: refuse to install with an unpinned CLI.
+          [ -n "${XP_VERSION}" ] || { echo "XP_VERSION is unset/empty"; exit 1; }
+          curl -sL "https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh" | sh
+          sudo mv crossplane /usr/local/bin/
+          crossplane version --client
+          # R7.4: confirm install.sh honoured the pin and did not fall back.
+          crossplane version --client | grep -qx "Client Version: ${XP_VERSION}" || {
+            echo "CLI version mismatch: expected ${XP_VERSION}"; exit 1;
+          }
+
+      # Cache the generated dependency models / package cache, keyed on the
+      # project file so a dependency change busts it.
+      - name: Cache Crossplane dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.crossplane/cache
+          key: crossplane-cache-${{ hashFiles('crossplane-project.yaml') }}
+          restore-keys: |
+            crossplane-cache-
+
+      # go vet/go test need the generated dev.crossplane.io/models module
+      # under schemas/go (gitignored, referenced via a go.mod replace
+      # directive), so this must run before the Go checks.
+      - name: Update dependency cache
+        run: crossplane dependency update-cache
+
       - name: gofmt
         working-directory: ${{ env.FUNCTION_DIR }}
         run: |
@@ -60,18 +88,6 @@ jobs:
       - name: go test
         working-directory: ${{ env.FUNCTION_DIR }}
         run: go test ./...
-
-      - name: Install Crossplane CLI
-        run: |
-          # R7.3: refuse to install with an unpinned CLI.
-          [ -n "${XP_VERSION}" ] || { echo "XP_VERSION is unset/empty"; exit 1; }
-          curl -sL "https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh" | sh
-          sudo mv crossplane /usr/local/bin/
-          crossplane version --client
-          # R7.4: confirm install.sh honoured the pin and did not fall back.
-          crossplane version --client | grep -qx "Client Version: ${XP_VERSION}" || {
-            echo "CLI version mismatch: expected ${XP_VERSION}"; exit 1;
-          }
 
       # render discovers and builds the embedded function itself (Docker is
       # available on ubuntu-latest), so no functions file argument is needed.
