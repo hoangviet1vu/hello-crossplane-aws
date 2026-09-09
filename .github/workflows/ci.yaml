@@ -108,14 +108,18 @@ jobs:
       # render discovers and builds the embedded function itself (Docker is
       # available on ubuntu-latest), so no functions file argument is needed.
       #
-      # GOFLAGS=-p=1 caps go build parallelism. The embedded function pulls in
-      # a large dependency graph (k8s.io/api, controller-runtime,
-      # crossplane-runtime, grpc, ...); building it with default parallelism
-      # (-p=NumCPU) can OOM-kill `go build` on the standard 2-core/7GB GitHub
-      # runner ("go build: signal: killed").
+      # `crossplane composition render` defaults --max-concurrency=8, meaning
+      # up to 8 embedded-function image builds run in flight at once, each
+      # holding a Go build/link in memory. On the standard 2-core/7GB GitHub
+      # runner that blows past available memory and `go build` gets
+      # OOM-killed ("go build: signal: killed"). --max-concurrency=1 serialises
+      # the builds; GOFLAGS/GOMEMLIMIT/GOGC put a further ceiling on the Go
+      # heap used by each one.
       - name: Render every example
         env:
           GOFLAGS: -p=1
+          GOMEMLIMIT: 5GiB
+          GOGC: "50"
         run: |
           # R3.6: a zero-match Example_Set must fail the gate, not pass silently.
           # nullglob makes the glob expand to nothing (not a literal) when empty;
@@ -126,6 +130,7 @@ jobs:
           for example in "${examples[@]}"; do
             echo "::group::render ${example}"
             crossplane composition render \
+              --max-concurrency=1 \
               "${example}" \
               apis/tenantenvironments/composition.yaml
             echo "::endgroup::"
