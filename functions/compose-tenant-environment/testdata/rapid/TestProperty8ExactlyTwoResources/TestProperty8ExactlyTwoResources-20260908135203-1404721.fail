@@ -1,0 +1,24 @@
+# 2026/09/08 13:52:03.442956 [TestProperty8ExactlyTwoResources] [rapid] draw tenant: "aaa"
+# 2026/09/08 13:52:03.442964 [TestProperty8ExactlyTwoResources] [rapid] draw environment: "dev"
+# 2026/09/08 13:52:03.442965 [TestProperty8ExactlyTwoResources] [rapid] draw region: "ap-southeast-1"
+# 2026/09/08 13:52:03.442966 [TestProperty8ExactlyTwoResources] [rapid] draw versioning: false
+# 2026/09/08 13:52:03.442967 [TestProperty8ExactlyTwoResources] [rapid] draw tableEnabled: false
+# 2026/09/08 13:52:03.442967 [TestProperty8ExactlyTwoResources] [rapid] draw repoEnabled: true
+# 2026/09/08 13:52:03.443070 [TestProperty8ExactlyTwoResources] desired composed resources for spec {tenant:aaa environment:dev region:ap-southeast-1 versioning:false tableEnabled:false repoEnabled:true}: expected exactly 2 resources [bucket bucket-versioning], got 3 with keys [bucket bucket-versioning repository]
+# 
+v0.4.8#15304888661943991364
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x1

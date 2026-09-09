@@ -55,10 +55,12 @@ type p8Spec struct {
 	repoEnabled  bool
 }
 
-// p8GenSpec draws a full valid TenantEnvironment spec, varying BOTH the
-// table.enabled and repository.enabled flags across all combinations (as well
-// as tenant, environment, region, and bucket.versioning) so the property is
-// exercised across the entire input space.
+// p8GenSpec draws a full valid TenantEnvironment spec, varying table.enabled
+// (as well as tenant, environment, region, and bucket.versioning) so the
+// property is exercised across the input space. repository.enabled is pinned
+// FALSE here: this property asserts the two-resource S3-slice invariant, which
+// only holds while ECR is disabled. The enabled case (three resources) is
+// covered by P-ECR-1 in fn_ecr_keyset_property_test.go.
 func p8GenSpec(t *rapid.T) p8Spec {
 	return p8Spec{
 		tenant:       p8TenantGen().Draw(t, "tenant"),
@@ -66,7 +68,7 @@ func p8GenSpec(t *rapid.T) p8Spec {
 		region:       rapid.SampledFrom(p8Regions).Draw(t, "region"),
 		versioning:   rapid.Bool().Draw(t, "versioning"),
 		tableEnabled: rapid.Bool().Draw(t, "tableEnabled"),
-		repoEnabled:  rapid.Bool().Draw(t, "repoEnabled"),
+		repoEnabled:  false,
 	}
 }
 
@@ -124,11 +126,12 @@ func p8Keys(resources map[resource.Name]*resource.DesiredComposed) []string {
 
 // Feature: tenant-environment-s3, Property 8: Exactly two resources are composed
 //
-// For any valid TenantEnvironment spec — with table.enabled and
-// repository.enabled taking any combination of true/false — RunFunction always
-// returns a desired composed resources map whose key set is EXACTLY
-// {"bucket", "bucket-versioning"}. No Table, no Repository, no other key is
-// ever emitted in this slice of the feature.
+// For any valid TenantEnvironment spec — with table.enabled taking any value
+// and repository.enabled FALSE — RunFunction always returns a desired composed
+// resources map whose key set is EXACTLY {"bucket", "bucket-versioning"}. No
+// Table, no Repository, no other key is emitted for this S3-slice invariant.
+// The repository.enabled=true case (three resources) is covered by P-ECR-1 in
+// fn_ecr_keyset_property_test.go.
 //
 // Validates: Requirements 4.1, 6.1, 6.2, 6.3
 func TestProperty8ExactlyTwoResources(t *testing.T) {

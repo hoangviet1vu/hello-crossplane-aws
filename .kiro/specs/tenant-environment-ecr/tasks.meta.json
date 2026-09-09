@@ -1,0 +1,379 @@
+{
+  "pbtResults": {
+    "3.7 Write property test P-ECR-6 for the Repository tag set": {
+      "status": "passed",
+      "lastRunTimestamp": 1788875872500
+    },
+    "3.8 Write property test P-ECR-7 for invalid-spec fatal behavior": {
+      "status": "passed",
+      "lastRunTimestamp": 1788875881994
+    }
+  },
+  "executionHistory": {
+    "1. Declare the ECR provider dependency": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875265204
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875283573
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875349454
+      }
+    ],
+    "2.1 Add `RepositoryName` to `naming.go`": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875265662
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875289905
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875358553
+      }
+    ],
+    "2.2 Extend `naming_test.go` table cases for `RepositoryName`": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875266030
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875364534
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875450465
+      }
+    ],
+    "2.3 Write property test P-ECR-8 for `RepositoryName`": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875266423
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875365339
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875451301
+      }
+    ],
+    "3.1 Add the `keyRepository` constant and the ECR model import": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875266853
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875366537
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875452543
+      }
+    ],
+    "3.2 Read `spec.repository.enabled` and conditionally build the Repository": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875267230
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875458873
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875597291
+      }
+    ],
+    "3.3 Write property test P-ECR-1 for the exact keyset": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875267653
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875606142
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875771940
+      }
+    ],
+    "3.4 Write property test P-ECR-2 for the Repository group and Kind": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875268255
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875607599
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875773286
+      }
+    ],
+    "3.5 Write property test P-ECR-3 for external-name, region, and no metadata.name": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875268636
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875782505
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875899964
+      }
+    ],
+    "3.6 Write property test P-ECR-4 for the Repository namespace": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875269153
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875783941
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875900910
+      }
+    ],
+    "3.7 Write property test P-ECR-6 for the Repository tag set": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875269520
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875784736
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875902325
+      }
+    ],
+    "3.8 Write property test P-ECR-7 for invalid-spec fatal behavior": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875269963
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875786093
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875903433
+      }
+    ],
+    "4. Checkpoint - naming + emission": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875270404
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788876431703
+      }
+    ],
+    "5.1 Extend `populateStatus` with the `repoEnabled` path": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875270945
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875608757
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875774713
+      }
+    ],
+    "5.2 Write property test P-ECR-5 for `status.repositoryUrl`": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875271324
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875910678
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788876025743
+      }
+    ],
+    "6.1 Verify the example XRs match the slice's enabled/disabled split": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875271757
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875609840
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875775746
+      }
+    ],
+    "6.2 Extend `fn_test.go` example expectations": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875272213
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875911850
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788876024629
+      }
+    ],
+    "7.1 Run Go format, vet, and tests": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875272703
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788876032602
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788876098743
+      }
+    ],
+    "7.2 Run composition render over both examples": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875273084
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788876105332
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788876411577
+      }
+    ],
+    "8. Final checkpoint - definition of done": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875273554
+      },
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788876436519
+      }
+    ],
+    "2. Extend the naming module with the ECR external name": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875451734
+      }
+    ],
+    "3. Conditionally emit the ECR Repository in `fn.go`": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788875903840
+      }
+    ],
+    "6. Verify and extend example wiring": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788876025109
+      }
+    ],
+    "5. Mirror the observed repository URL into status": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788876026143
+      }
+    ],
+    "7. Verification gate": [
+      {
+        "executionId": "655c9949-7865-4d33-8f11-ed884cfb5452",
+        "chatSessionId": "sess_7e2f22d2-83f4-4569-bd22-8dc554978eba",
+        "timestamp": 1788876411983
+      }
+    ]
+  }
+}

@@ -32,40 +32,45 @@ func TestBuildNames(t *testing.T) {
 			tenant:      shortestTenant,
 			environment: "dev",
 			want: Names{
-				Namespace:  "abc-dev",
-				BucketName: "abc-dev-bucket",
+				Namespace:      "abc-dev",
+				BucketName:     "abc-dev-bucket",
+				RepositoryName: "abc-dev-ecr",
 			},
 		},
 		"longest tenant, prod": {
 			tenant:      longestTenant,
 			environment: "prod",
 			want: Names{
-				Namespace:  "a12345678901234567890b-prod",
-				BucketName: "a12345678901234567890b-prod-bucket",
+				Namespace:      "a12345678901234567890b-prod",
+				BucketName:     "a12345678901234567890b-prod-bucket",
+				RepositoryName: "a12345678901234567890b-prod-ecr",
 			},
 		},
 		"environment dev": {
 			tenant:      "acme",
 			environment: "dev",
 			want: Names{
-				Namespace:  "acme-dev",
-				BucketName: "acme-dev-bucket",
+				Namespace:      "acme-dev",
+				BucketName:     "acme-dev-bucket",
+				RepositoryName: "acme-dev-ecr",
 			},
 		},
 		"environment staging": {
 			tenant:      "acme",
 			environment: "staging",
 			want: Names{
-				Namespace:  "acme-staging",
-				BucketName: "acme-staging-bucket",
+				Namespace:      "acme-staging",
+				BucketName:     "acme-staging-bucket",
+				RepositoryName: "acme-staging-ecr",
 			},
 		},
 		"environment prod": {
 			tenant:      "acme",
 			environment: "prod",
 			want: Names{
-				Namespace:  "acme-prod",
-				BucketName: "acme-prod-bucket",
+				Namespace:      "acme-prod",
+				BucketName:     "acme-prod-bucket",
+				RepositoryName: "acme-prod-ecr",
 			},
 		},
 		"empty tenant": {

@@ -15,8 +15,9 @@ const managedBy = "crossplane"
 
 // Names holds the deterministic identifiers derived from a TenantEnvironment.
 type Names struct {
-	Namespace  string // "<tenant>-<env>"
-	BucketName string // "<tenant>-<env>-bucket"  (the AWS external name)
+	Namespace      string // "<tenant>-<env>"
+	BucketName     string // "<tenant>-<env>-bucket"  (the AWS external name)
+	RepositoryName string // "<tenant>-<env>-ecr"     (the ECR external name)
 }
 
 // BuildNames validates tenant and environment and returns the derived names.
@@ -34,8 +35,9 @@ func BuildNames(tenant, environment string) (Names, error) {
 
 	namespace := tenant + "-" + environment
 	return Names{
-		Namespace:  namespace,
-		BucketName: namespace + "-bucket",
+		Namespace:      namespace,
+		BucketName:     namespace + "-bucket",
+		RepositoryName: namespace + "-ecr",
 	}, nil
 }
 

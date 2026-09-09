@@ -1,0 +1,24 @@
+# 2026/09/08 13:52:03.448764 [TestProperty5NamespacedGroupAndKind] [rapid] draw tenant: "aaa"
+# 2026/09/08 13:52:03.448768 [TestProperty5NamespacedGroupAndKind] [rapid] draw environment: "dev"
+# 2026/09/08 13:52:03.448770 [TestProperty5NamespacedGroupAndKind] [rapid] draw region: "ap-southeast-1"
+# 2026/09/08 13:52:03.448771 [TestProperty5NamespacedGroupAndKind] [rapid] draw versioning: false
+# 2026/09/08 13:52:03.448772 [TestProperty5NamespacedGroupAndKind] [rapid] draw tableEnabled: false
+# 2026/09/08 13:52:03.448773 [TestProperty5NamespacedGroupAndKind] [rapid] draw repoEnabled: true
+# 2026/09/08 13:52:03.448934 [TestProperty5NamespacedGroupAndKind] desired resource "repository" apiVersion = "ecr.aws.m.upbound.io/v1beta1"; want "s3.aws.m.upbound.io/v1beta1" (spec={tenant:aaa environment:dev region:ap-southeast-1 versioning:false tableEnabled:false repoEnabled:true})
+# 
+v0.4.8#15104835858531867833
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x0
+0x1
