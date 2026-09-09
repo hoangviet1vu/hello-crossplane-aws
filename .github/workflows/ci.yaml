@@ -91,7 +91,15 @@ jobs:
 
       # render discovers and builds the embedded function itself (Docker is
       # available on ubuntu-latest), so no functions file argument is needed.
+      #
+      # GOFLAGS=-p=1 caps go build parallelism. The embedded function pulls in
+      # a large dependency graph (k8s.io/api, controller-runtime,
+      # crossplane-runtime, grpc, ...); building it with default parallelism
+      # (-p=NumCPU) can OOM-kill `go build` on the standard 2-core/7GB GitHub
+      # runner ("go build: signal: killed").
       - name: Render every example
+        env:
+          GOFLAGS: -p=1
         run: |
           # R3.6: a zero-match Example_Set must fail the gate, not pass silently.
           # nullglob makes the glob expand to nothing (not a literal) when empty;
